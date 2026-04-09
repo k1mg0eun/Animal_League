@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>학점 지키기 프로젝트</title>
+<title>교수님이 던지는 학점 피하기</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -23,6 +23,8 @@ body{background:var(--bg);display:flex;justify-content:center;align-items:flex-s
 .fi{width:100%;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.11);border-radius:13px;padding:15px 17px;font-family:inherit;font-size:15px;font-weight:500;color:#fff;outline:none;transition:border-color .2s;}
 .fi::placeholder{color:rgba(255,255,255,.22);font-weight:400;}
 .fi:focus{border-color:var(--blue);}
+select.fi{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.4)' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;}
+select.fi option{background:#1e2140;color:#fff;}
 .gender-row{display:flex;gap:10px;}
 .gb2{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:13px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:rgba(255,255,255,.45);font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:all .18s;}
 .gb2:hover{background:rgba(255,255,255,.09);color:rgba(255,255,255,.8);}
@@ -43,7 +45,7 @@ body{background:var(--bg);display:flex;justify-content:center;align-items:flex-s
 .hud-top{display:flex;align-items:center;gap:11px;}
 .hud-av{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:2px solid rgba(255,255,255,.1);}
 .hud-info{display:flex;flex-direction:column;}
-.hud-name{font-size:14px;font-weight:800;color:#fff;line-height:1.2;}
+.hud-name{font-size:14px;font-weight:800;color:#2c2c2c;line-height:1.2;}
 .hud-phase{font-size:10.5px;color:var(--sub);}
 .hud-right{margin-left:auto;display:flex;align-items:center;gap:14px;}
 .hud-graze{font-size:11px;font-weight:700;color:#fbbf24;}
@@ -51,6 +53,10 @@ body{background:var(--bg);display:flex;justify-content:center;align-items:flex-s
 .hud-score{font-size:17px;font-weight:900;color:#fff;line-height:1;}
 .hud-score-lbl{font-size:8.5px;color:var(--sub);}
 .hud-hp-row{display:flex;align-items:center;gap:9px;flex:1;max-width:400px;}
+#hp-side{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:240px;background:rgba(0,0,0,.35);border-radius:100px;z-index:5;box-shadow:0 2px 12px rgba(0,0,0,.5);display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;}
+#hp-side-fill{width:100%;height:100%;background:#00C471;border-radius:100px;transition:height .3s,background .3s;}
+#hp-side-num{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:800;color:#fff;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.8);}
+#hp-side-lbl{position:absolute;bottom:-36px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:700;color:rgba(255,255,255,.6);text-shadow:0 1px 3px rgba(0,0,0,.8);}
 .hud-hp-lbl{font-size:11px;font-weight:700;color:var(--sub);width:20px;}
 .hud-hp-bar{flex:1;height:7px;background:rgba(255,255,255,.1);border-radius:100px;overflow:hidden;}
 #hb{height:100%;border-radius:100px;background:var(--red);transition:width .25s,background .25s;}
@@ -62,20 +68,92 @@ body{background:var(--bg);display:flex;justify-content:center;align-items:flex-s
 #canvas-wrap::after{content:'';position:absolute;bottom:0;left:0;right:0;height:52%;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 300' preserveAspectRatio='xMidYMax slice'%3E%3Crect x='0' y='55' width='115' height='245' fill='%23afc49a' rx='2'/%3E%3Crect x='12' y='74' width='17' height='20' fill='%23cce0ba' rx='1'/%3E%3Crect x='12' y='108' width='17' height='20' fill='%23cce0ba' rx='1'/%3E%3Crect x='40' y='74' width='17' height='20' fill='%23cce0ba' rx='1'/%3E%3Crect x='40' y='108' width='17' height='20' fill='%23cce0ba' rx='1'/%3E%3Crect x='68' y='74' width='17' height='20' fill='%23cce0ba' rx='1'/%3E%3Crect x='68' y='108' width='17' height='20' fill='%23cce0ba' rx='1'/%3E%3Crect x='125' y='18' width='205' height='282' fill='%23b6c9a8' rx='3'/%3E%3Crect x='142' y='35' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='177' y='35' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='212' y='35' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='247' y='35' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='282' y='35' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='142' y='76' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='177' y='76' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='212' y='76' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='247' y='76' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='282' y='76' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='142' y='117' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='177' y='117' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='212' y='117' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='247' y='117' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='340' y='75' width='165' height='225' fill='%23a8be98' rx='2'/%3E%3Crect x='356' y='93' width='20' height='23' fill='%23c4d8b4' rx='1'/%3E%3Crect x='386' y='93' width='20' height='23' fill='%23c4d8b4' rx='1'/%3E%3Crect x='416' y='93' width='20' height='23' fill='%23c4d8b4' rx='1'/%3E%3Crect x='446' y='93' width='20' height='23' fill='%23c4d8b4' rx='1'/%3E%3Crect x='356' y='130' width='20' height='23' fill='%23c4d8b4' rx='1'/%3E%3Crect x='386' y='130' width='20' height='23' fill='%23c4d8b4' rx='1'/%3E%3Crect x='416' y='130' width='20' height='23' fill='%23c4d8b4' rx='1'/%3E%3Crect x='446' y='130' width='20' height='23' fill='%23c4d8b4' rx='1'/%3E%3Crect x='515' y='35' width='175' height='265' fill='%23b8cca6' rx='3'/%3E%3Crect x='530' y='53' width='21' height='25' fill='%23cce0be' rx='1'/%3E%3Crect x='561' y='53' width='21' height='25' fill='%23cce0be' rx='1'/%3E%3Crect x='592' y='53' width='21' height='25' fill='%23cce0be' rx='1'/%3E%3Crect x='623' y='53' width='21' height='25' fill='%23cce0be' rx='1'/%3E%3Crect x='654' y='53' width='21' height='25' fill='%23cce0be' rx='1'/%3E%3Crect x='530' y='92' width='21' height='25' fill='%23cce0be' rx='1'/%3E%3Crect x='561' y='92' width='21' height='25' fill='%23cce0be' rx='1'/%3E%3Crect x='592' y='92' width='21' height='25' fill='%23cce0be' rx='1'/%3E%3Crect x='623' y='92' width='21' height='25' fill='%23cce0be' rx='1'/%3E%3Crect x='700' y='65' width='145' height='235' fill='%23afc09e' rx='2'/%3E%3Crect x='714' y='82' width='18' height='21' fill='%23c6dab6' rx='1'/%3E%3Crect x='742' y='82' width='18' height='21' fill='%23c6dab6' rx='1'/%3E%3Crect x='770' y='82' width='18' height='21' fill='%23c6dab6' rx='1'/%3E%3Crect x='798' y='82' width='18' height='21' fill='%23c6dab6' rx='1'/%3E%3Crect x='714' y='118' width='18' height='21' fill='%23c6dab6' rx='1'/%3E%3Crect x='742' y='118' width='18' height='21' fill='%23c6dab6' rx='1'/%3E%3Crect x='770' y='118' width='18' height='21' fill='%23c6dab6' rx='1'/%3E%3C/svg%3E") center bottom / cover no-repeat;z-index:0;opacity:.82;}
 #cv{position:absolute;inset:0;display:block;width:100%;height:100%;z-index:2;}
 
+/* ── 시험 페이즈 지옥 배경 */
+#hell-overlay{
+  position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:radial-gradient(ellipse at center,rgba(60,0,0,0) 30%,rgba(120,0,0,.45) 100%);
+  transition:background 1.5s ease,opacity 1.5s ease;
+  opacity:0;
+}
+#canvas-wrap.exam-mode::before{
+  background:linear-gradient(180deg,#0d0008 0%,#1a0010 25%,#2a0015 50%,#1a0008 75%,#0d0005 100%) !important;
+}
+#canvas-wrap.exam-mode #hell-overlay{opacity:1;}
+
+/* 시험 안내 카드 — 지옥 스타일 */
+.ann-card.hell{
+  background:rgba(30,0,0,.95);
+  border-color:#ff2200 !important;
+  box-shadow:0 0 40px rgba(255,30,0,.35),inset 0 0 30px rgba(80,0,0,.5);
+}
+.ann-card.hell .ann-name{color:#ff4444;text-shadow:0 0 12px rgba(255,0,0,.8);}
+.ann-card.hell .ann-month{color:#ff6060 !important;}
+.ann-card.hell .ann-quote{color:rgba(255,180,180,.6);}
+
 /* ── RESULT */
-#s2{display:none;flex-direction:column;align-items:center;padding:48px 20px 60px;gap:18px;}
-.res-badge{width:88px;height:88px;border-radius:50%;display:flex;align-items:center;justify-content:center;animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both;}
-@keyframes popIn{0%{transform:scale(0);opacity:0}100%{transform:scale(1);opacity:1}}
-.res-by{font-size:12px;color:var(--sub);}
-.res-quote{font-size:15px;font-weight:700;color:#fff;text-align:center;line-height:1.6;max-width:400px;}
-.res-cards{width:100%;max-width:480px;display:flex;flex-direction:column;gap:9px;}
-.res-row{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:13px 17px;display:flex;align-items:center;justify-content:space-between;}
-.res-lbl{font-size:12.5px;color:var(--sub);}
-.res-val{font-size:18px;font-weight:900;color:#fff;}
-.res-btns{width:100%;max-width:480px;display:flex;flex-direction:column;gap:8px;}
-#rb2{font-family:inherit;font-size:15px;font-weight:800;width:100%;padding:16px;background:var(--blue);color:#fff;border:none;border-radius:13px;cursor:pointer;box-shadow:0 4px 18px rgba(108,123,255,.35);transition:transform .1s;}
+@keyframes popIn{0%{transform:scale(.88) rotate(-1.5deg);opacity:0}100%{transform:scale(1) rotate(-1.5deg);opacity:1}}
+@keyframes stampIn{0%{transform:rotate(-12deg) scale(0);opacity:0}70%{transform:rotate(-12deg) scale(1.15)}100%{transform:rotate(-12deg) scale(1);opacity:1}}
+
+#s2{
+  display:none;flex-direction:column;align-items:center;
+  min-height:100vh;padding:32px 20px 48px;gap:18px;
+  background:#2d4a3a;
+  background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:26px 26px;
+}
+
+.res-paper{width:100%;max-width:360px;position:relative;transform:rotate(-1.5deg);animation:popIn .55s cubic-bezier(.34,1.56,.64,1) both;}
+.res-torn-top,.res-paper-body,.res-torn-bottom{position:relative;z-index:1;}
+.res-torn-top{width:100%;height:14px;background:#f2edda;border-radius:6px 6px 0 0;}
+.res-torn-bottom{width:100%;height:14px;background:#f2edda;border-radius:0 0 6px 6px;}
+.res-paper-body{
+  background:#f2edda;padding:18px 22px 22px 30px;position:relative;
+  border-left:3px solid #ddd0b0;border-right:3px solid #ddd0b0;
+}
+.res-paper-body::before{
+  content:'';position:absolute;left:-2px;top:0;bottom:0;width:4px;
+  background:repeating-linear-gradient(180deg,transparent 0,transparent 26px,#b8a878 26px,#b8a878 30px);
+}
+.res-school-name{font-size:12px;font-weight:700;color:#666;text-align:center;margin-bottom:3px;letter-spacing:.5px;}
+.res-paper-title{font-size:24px;font-weight:900;color:#1a1a1a;text-align:center;margin-bottom:6px;letter-spacing:-1px;}
+.res-paper-prof{font-size:13px;color:#555;text-align:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1.5px solid #c8b888;}
+.res-paper-rows{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
+.res-paper-row{display:flex;align-items:baseline;gap:0;font-size:16px;font-weight:700;color:#1a1a1a;letter-spacing:.2px;font-family:'Noto Sans KR',sans-serif;}
+.res-paper-row .r-lbl{width:90px;flex-shrink:0;}
+.res-paper-row .r-sep{margin:0 8px;color:#555;font-weight:400;}
+.res-paper-row .r-val{font-weight:900;color:#1a1a1a;}
+.res-paper-row .r-val.red{color:#c8302a;}
+.res-paper-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;}
+.res-paper-quote{font-size:11px;font-weight:700;color:#c8302a;line-height:1.7;max-width:170px;}
+.res-stamp{
+  width:76px;height:76px;flex-shrink:0;border-radius:50%;
+  border:3.5px dashed #c8302a;display:flex;align-items:center;justify-content:center;
+  font-size:36px;font-weight:900;color:#c8302a;transform:rotate(-12deg);opacity:.82;
+  animation:stampIn .6s cubic-bezier(.34,1.56,.64,1) .35s both;position:relative;
+  box-shadow:inset 0 0 0 1px rgba(200,48,42,.2);font-family:'Noto Sans KR',sans-serif;
+}
+.res-stamp::after{content:'';position:absolute;inset:-5px;border-radius:50%;border:1px dashed rgba(200,48,42,.3);}
+.res-btns{width:100%;max-width:360px;display:flex;flex-direction:column;gap:10px;}
+#share-btn{
+  font-family:inherit;font-size:15px;font-weight:700;width:100%;padding:16px;
+  background:#fff;color:#333;border:none;border-radius:14px;cursor:pointer;transition:transform .1s;
+  display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 10px rgba(0,0,0,.18);
+}
+#share-btn:active{transform:scale(.98);}
+.res-btn-row{display:flex;gap:10px;}
+#rb2{font-family:inherit;font-size:13.5px;font-weight:700;flex:1;padding:14px;background:rgba(255,255,255,.13);color:#fff;border:1.5px solid rgba(255,255,255,.28);border-radius:14px;cursor:pointer;transition:transform .1s;display:flex;align-items:center;justify-content:center;gap:5px;}
 #rb2:active{transform:scale(.98);}
-#hb2{font-family:inherit;font-size:13.5px;font-weight:600;width:100%;padding:13px;background:transparent;color:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.1);border-radius:13px;cursor:pointer;}
+#hb2{font-family:inherit;font-size:13.5px;font-weight:700;flex:1;padding:14px;background:rgba(255,255,255,.13);color:#fff;border:1.5px solid rgba(255,255,255,.28);border-radius:14px;cursor:pointer;transition:transform .1s;display:flex;align-items:center;justify-content:center;gap:5px;}
+#hb2:active{transform:scale(.98);}
+.rank-section{width:100%;max-width:360px;}
+.rank-title{font-size:12px;font-weight:800;color:rgba(255,255,255,.45);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.rank-me{color:#8bc4a8;font-size:11px;}
+.rank-item{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-radius:10px;margin-bottom:5px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:12.5px;}
+.rank-item.me{background:rgba(139,196,168,.18);border-color:rgba(139,196,168,.4);}
+.rank-medal{width:22px;text-align:center;font-size:13px;}
+.rank-score{font-weight:500;color:rgba(255,255,255,.6);}
+.rank-item.me .rank-score{font-weight:900;color:#fff;}
+.rank-loading{font-size:12px;color:rgba(255,255,255,.3);text-align:center;padding:16px;}
 
 #ann-overlay{position:absolute;inset:0;z-index:10;display:none;align-items:center;justify-content:center;pointer-events:none;}
 #end-overlay{position:absolute;inset:0;z-index:10;display:none;align-items:center;justify-content:center;pointer-events:none;}
@@ -101,6 +179,39 @@ body{background:var(--bg);display:flex;justify-content:center;align-items:flex-s
   </div>
   <div class="s0-form">
     <div>
+      <div class="fl">소속 대학교</div>
+      <select id="school-select" class="fi">
+        <option value="" disabled selected>대학교를 선택해주세요</option>
+        <option>가천대학교</option><option>가톨릭대학교</option><option>강남대학교</option>
+        <option>경기대학교</option><option>경남대학교</option><option>경북대학교</option>
+        <option>경상국립대학교</option><option>경성대학교</option><option>경희대학교</option>
+        <option>계명대학교</option><option>고려대학교(서울)</option><option>고려대학교(세종)</option>
+        <option>공주대학교(천안)</option><option>광운대학교</option><option>국립창원대학교</option>
+        <option>국민대학교</option><option>금오공과대학교</option><option>단국대학교</option>
+        <option>대구대학교</option><option>덕성여자대학교</option><option>동국대학교</option>
+        <option>동덕여자대학교</option><option>동아대학교</option><option>명지대학교(인문)</option>
+        <option>명지대학교(자연)</option><option>백석대학교</option><option>삼육대학교</option>
+        <option>상명대학교(서울)</option><option>상명대학교(천안)</option><option>서강대학교</option>
+        <option>서경대학교</option><option>서울과학기술대학교</option><option>서울대학교</option>
+        <option>서울시립대학교</option><option>서울여자대학교</option><option>서울예술대학교</option>
+        <option>서일대학교</option><option>성결대학교</option><option>성공회대학교</option>
+        <option>성균관대학교</option><option>성신여자대학교</option><option>선문대학교</option>
+        <option>숙명여자대학교</option><option>순천대학교</option><option>순천향대학교</option>
+        <option>숭실대학교</option><option>신한대학교</option><option>수원대학교</option>
+        <option>연세대학교</option><option>연세대학교(미래)</option><option>연암공과대학교</option>
+        <option>영남대학교</option><option>을지대학교</option><option>이화여자대학교</option>
+        <option>인천대학교</option><option>인하공업전문대학</option><option>인하대학교</option>
+        <option>전북대학교</option><option>제주대학교</option><option>중부대학교</option>
+        <option>중앙대학교</option><option>청주대학교</option><option>충남대학교</option>
+        <option>충북대학교</option><option>태재대학교</option><option>평택대학교</option>
+        <option>한국공학대학교</option><option>한국교통대학교</option><option>한국기술교육대학교</option>
+        <option>한국외국어대학교</option><option>한국외국어대학교(글로벌)</option><option>한국항공대학교</option>
+        <option>한남대학교</option><option>한동대학교</option><option>한림대학교</option>
+        <option>한밭대학교</option><option>한서대학교</option><option>한성대학교</option>
+        <option>호서대학교</option><option>홍익대학교</option>
+      </select>
+    </div>
+    <div>
       <div class="fl">교수님 성함</div>
       <input id="pi" class="fi" type="text" placeholder="교수님 성함을 입력해주세요." maxlength="10" autocomplete="off"/>
     </div>
@@ -121,74 +232,112 @@ body{background:var(--bg);display:flex;justify-content:center;align-items:flex-s
       <div class="how-item"><span class="how-ico">💚</span><span><span class="hl-g">A/B</span> 학점은 HP 회복</span></div>
       <div class="how-item"><span class="how-ico">💔</span><span><span class="hl-r">C/D/F</span> 학점은 HP 감소</span></div>
       <div class="how-item"><span class="how-ico">✨</span><span>탄막을 스쳐 지나가면 그레이즈 보너스를 얻습니다</span></div>
+      <div class="how-item"><span class="how-ico">🛡️</span><span>시험 기간에는 <b>SAFE 존</b> 안에 있으면 F 탄막을 막을 수 있어요!</span></div>
     </div>
   </div>
 </div>
 
 <!-- ── GAME -->
 <div id="game-screen">
-    <div id="hud">
+  <div id="hud">
     <div class="hud-top">
-        <div class="hud-av" id="hud-av">👨‍🏫</div>
-        <div class="hud-info">
+      <div class="hud-av" id="hud-av">👨‍🏫</div>
+      <div class="hud-info">
         <div class="hud-name" id="hud-name">교수님</div>
         <div class="hud-phase" id="hud-phase">3월 — 개강의 달</div>
-        </div>
-        <div class="hud-hp-row">
-        <div class="hud-hp-lbl">HP</div>
-        <div class="hud-hp-bar"><div id="hb" style="width:100%"></div></div>
-        <div class="hud-hp-num" id="hud-hp-num">100/100</div>
-        </div>
-        <div class="hud-right">
+      </div>
+      <div class="hud-right">
         <div class="hud-graze" id="hud-graze">그레이즈 0</div>
         <div class="hud-score-wrap">
-            <div class="hud-score" id="sn">0</div>
-            <div class="hud-score-lbl">점수</div>
+          <div class="hud-score" id="sn">0</div>
+          <div class="hud-score-lbl">점수</div>
         </div>
-        </div>
+      </div>
     </div>
-    </div>
+  </div>
   <div id="canvas-wrap">
+    <div id="hell-overlay"></div>
     <canvas id="cv"></canvas>
-        <div id="ann-overlay">
-            <div class="ann-card" id="ann-card">
-                <div class="ann-month" id="ann-month">3월</div>
-                <div class="ann-name" id="ann-name">개강의 달</div>
-                <div class="ann-divider"></div>
-                <div class="ann-quote" id="ann-quote"></div>
-                <div class="ann-dots" id="ann-dots"></div>
-            </div>
-        </div>
-        <div id="end-overlay">
-        <div class="ann-card" id="end-card">
-            <div class="ann-name" style="font-size:24px">🎓 종강이다!</div>
-            <div class="ann-divider"></div>
-            <div class="ann-quote">"한 학기, 수고했어. 이제 결과를 보자."</div>
-        </div>
-        </div>
+    <div id="hp-side">
+      <div id="hp-side-fill"></div>
+      <div id="hp-side-num">100</div>
+      <div id="hp-side-lbl">HP</div>
+    </div>
+    <div id="ann-overlay">
+      <div class="ann-card" id="ann-card">
+        <div class="ann-month" id="ann-month">3월</div>
+        <div class="ann-name" id="ann-name">개강의 달</div>
+        <div class="ann-divider"></div>
+        <div class="ann-quote" id="ann-quote"></div>
+        <div class="ann-dots" id="ann-dots"></div>
+      </div>
+    </div>
+    <div id="end-overlay">
+      <div class="ann-card" id="end-card">
+        <div class="ann-name" style="font-size:24px">🎓 종강이다!</div>
+        <div class="ann-divider"></div>
+        <div class="ann-quote">"한 학기, 수고했어. 이제 결과를 보자."</div>
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- ── RESULT -->
 <div id="s2">
-  <div class="res-badge" id="rbg"></div>
-  <div class="res-by" id="rby"></div>
-  <div class="res-quote" id="rqt"></div>
-  <div class="res-cards">
-    <div class="res-row"><span class="res-lbl">🏆 최종 점수</span><span class="res-val" id="rv0"></span></div>
-    <div class="res-row"><span class="res-lbl">⏱ 생존 시간</span><span class="res-val" id="rv1"></span></div>
-    <div class="res-row"><span class="res-lbl">✨ 그레이즈</span><span class="res-val" id="rv2"></span></div>
-    <div class="res-row"><span class="res-lbl">📅 마지막 페이즈</span><span class="res-val" id="rv3" style="font-size:13px"></span></div>
+  <div class="res-paper">
+    <div class="res-torn-top"></div>
+    <div class="res-paper-body">
+      <div class="res-school-name" id="res-school">○○대학교</div>
+      <div class="res-paper-title">1학기 성적표</div>
+      <div class="res-paper-prof" id="rby">담당 교수 : —</div>
+      <div class="res-paper-rows">
+        <div class="res-paper-row">
+          <span class="r-lbl">학기 석차</span><span class="r-sep">:</span>
+          <span class="r-val red" id="res-rank">집계 중...</span>
+        </div>
+        <div class="res-paper-row">
+          <span class="r-lbl">생존 시간</span><span class="r-sep">:</span>
+          <span class="r-val" id="rv1">0초</span>
+        </div>
+        <div class="res-paper-row">
+          <span class="r-lbl">최종 점수</span><span class="r-sep">:</span>
+          <span class="r-val" id="rv0">0</span>
+        </div>
+      </div>
+      <div class="res-paper-bottom">
+        <div class="res-paper-quote" id="rqt"></div>
+        <div class="res-stamp" id="rbg">?</div>
+      </div>
+    </div>
+    <div class="res-torn-bottom"></div>
   </div>
   <div class="res-btns">
-    <button id="rb2">다시 도전하기</button>
-    <button id="hb2">처음으로</button>
+    <button id="share-btn" onclick="shareResult()">&#x2197;&nbsp;&nbsp;공유하기</button>
+    <div class="res-btn-row">
+      <button id="rb2">〈&nbsp;다시 도전하기</button>
+      <button id="hb2">처음으로&nbsp;〉</button>
+    </div>
+  </div>
+  <div class="rank-section" id="rank-section">
+    <div class="rank-loading">🔄 랭킹 불러오는 중...</div>
   </div>
 </div>
 
 </div>
 <script>
 (function(){
+  const lionImg = new Image();
+  lionImg.src = 'lion.png';
+
+  const bgm = new Audio('bgm.mp3');  // ← 추가
+  bgm.loop = true;
+  bgm.volume = 0.5;
+
+const maleProfImg = new Image();    // ← 추가
+maleProfImg.src = 'male_professer.png';
+const femaleProfImg = new Image();  // ← 추가
+femaleProfImg.src = 'female_professer.png';
+
 const cvEl=document.getElementById('cv');
 const ctx=cvEl.getContext('2d');
 let CW=800,CH=540;
@@ -199,21 +348,23 @@ function resizeCanvas(){
   cvEl.width=CW;cvEl.height=CH;
 }
 
-// ═══ 원본 게임 로직 (index.html 그대로) ═══
+// ═══ 3.2 게임 로직 (피버 시스템 제거) ═══
 
 const PH=[
-  {month:'3월', name:'개강의 달',               quote:'"새 학기야. 어디 한번 해봐!"',       bg:'transparent',acc:'#3182F6',fiv:1500,miv:700, wt:[9,13,22,20,11],arms:2,startT:0 },
-  {month:'4월', name:'벚꽃 그리고 중간고사',    quote:'"중간고사다. 이제부터 진심이야."',   bg:'transparent',acc:'#FF6BA8',fiv:1100,miv:500, wt:[6,10,24,22,14],arms:3,startT:12},
-  {month:'5월', name:'축제의 달',                quote:'"축제라고 방심하면 F야!"',           bg:'transparent',acc:'#00C471',fiv:850, miv:360, wt:[5,8,20,22,18], arms:4,startT:24},
-  {month:'6월', name:'기말고사 그리고 종강의 달',quote:'"살아남아 봐. 이번엔 진심이야."',   bg:'transparent',acc:'#D02030',fiv:680, miv:240, wt:[3,5,17,22,23],arms:5,startT:36}
+  {month:'3월', name:'개강의 달',            quote:'"새 학기야. 어디 한번 해봐!"',                         bg:'transparent',acc:'#3182F6',fiv:1500,miv:700, wt:[9,13,22,20,11],arms:2,startT:0 },
+  {month:'4월', name:'벚꽃 그리고 중간고사', quote:'"중간고사다. 이제부터 진심이야."',                     bg:'transparent',acc:'#FF6BA8',fiv:1100,miv:500, wt:[6,10,24,22,14],arms:3,startT:12},
+  {month:'중간고사', name:'지옥의 중간고사', quote:'"도망쳐도 소용없어. F만 있을 뿐이야."',               bg:'transparent',acc:'#FF3030',fiv:800, miv:380, wt:[0,0,0,0,100],  arms:3,startT:20,exam:true,examName:'midterm'},
+  {month:'5월', name:'축제의 달',             quote:'"축제라고 방심하면 F야!"',                            bg:'transparent',acc:'#00C471',fiv:850, miv:360, wt:[5,8,20,22,18], arms:4,startT:27},
+  {month:'6월', name:'종강의 달',             quote:'"살아남아 봐. 이번엔 진심이야."',                    bg:'transparent',acc:'#D02030',fiv:780, miv:300, wt:[3,5,17,22,23], arms:5,startT:39},
+  {month:'기말고사', name:'최후의 기말고사',  quote:'"이제 진짜 조금만 더 하면 종강이니 F를 피하도록."', bg:'transparent',acc:'#CC0000',fiv:650, miv:240, wt:[0,0,0,0,100],  arms:5,startT:49,exam:true}
 ];
 
 const LC={
-  A:{c:'#00C471',bg:'rgba(0,90,40,.88)',  tc:'#fff',      sp:3.5,r:13,hr:9},
-  B:{c:'#3182F6',bg:'rgba(8,40,130,.88)', tc:'#fff',      sp:3.5,r:13,hr:9},
-  C:{c:'#FFE033',bg:'rgba(120,100,0,.88)', tc:'#fff', sp:3.5,r:13,hr:9},
-  D:{c:'#E06000',bg:'rgba(95,25,0,.88)',  tc:'#fff',      sp:3.5,r:13,hr:9},
-  F:{c:'#FF5C6A',bg:'rgba(55,4,4,.92)',   tc:'#fff', sp:3.5,r:13,hr:9}
+  A:{c:'#00C471',bg:'rgba(0,90,40,.88)',   tc:'#fff',sp:3.5,r:13,hr:9},
+  B:{c:'#3182F6',bg:'rgba(8,40,130,.88)',  tc:'#fff',sp:3.5,r:13,hr:9},
+  C:{c:'#FFE033',bg:'rgba(120,100,0,.88)', tc:'#fff',sp:3.5,r:13,hr:9},
+  D:{c:'#E06000',bg:'rgba(95,25,0,.88)',   tc:'#fff',sp:3.5,r:13,hr:9},
+  F:{c:'#FF5C6A',bg:'rgba(55,4,4,.92)',    tc:'#fff',sp:3.5,r:13,hr:9}
 };
 const FX={A:15,B:5,C:-10,D:-20,F:-999};
 const SFX={A:150,B:80,C:8,D:8,F:8};
@@ -228,7 +379,11 @@ let keys={},touch={x:null,y:null};
 let Px=400,Py=460;
 let curPh=0,ann={on:false,a:0,t:0,ph:0},endAnn={on:false,a:0,t:0},gameEnding=false;
 const HR=5,GZR=20,SPD=3.2,FSP=1.5;
-const GAME_END_TIME=48;
+
+// 세이프존
+let safeZones=[],safeZoneTimer=0;
+const SAFE_ZONE_INTERVAL=2000;
+const GAME_END_TIME=57;
 
 function setGender(g){
   gender=g;
@@ -240,7 +395,6 @@ window.setGender=setGender;
 function wPick(w){const t=w.reduce((a,b)=>a+b,0);let r=Math.random()*t;for(let i=0;i<5;i++){r-=w[i];if(r<=0)return'ABCDF'[i];}return'F';}
 function rrct(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
 
-// 파티클 (원본 로직, CW/CH 동적 적용)
 function initStars(){stars=[];for(let i=0;i<85;i++)stars.push({x:Math.random()*CW,y:Math.random()*CH,r:.4+Math.random()*1.2,s:.05+Math.random()*.25,o:.15+Math.random()*.5});}
 
 function initDecor(p){
@@ -271,54 +425,121 @@ function drawDecor(){
   ctx.globalAlpha=1;
 }
 
-// 보스 (캔버스 너비 기준)
-function bossX(){return CW/2+Math.sin(diff*.0008)*Math.min(140,CW*.32);}
-function bossY(){return 68;}
-
-// 탄막 spawn (원본 그대로)
-function spawn(x,y,ang,letter,sm){
-  const c=LC[letter],sp=(letter==='F'?3.5:c.sp)*(sm||1);
-  bullets.push({x,y,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,letter,c:c.c,bg:c.bg,tc:c.tc,r:c.r,hr:c.hr,gz:false});
+function bossX(){
+  if(gameEnding)return CW/2;
+  return CW/2+Math.sin(diff*.0008)*Math.min(140,CW*.32);
+}
+function bossY(){
+  if(gameEnding)return 90;
+  return 90+Math.sin(diff*.0006)*18;
 }
 
-// 발사 패턴 (원본 그대로: 3종 순환)
+function spawn(x,y,ang,letter,sm){
+  const c=LC[letter],sp=(letter==='F'?3.5:c.sp)*(sm||1);
+  bullets.push({x,y,alpha:1,fading:false,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,letter,c:c.c,bg:c.bg,tc:c.tc,r:c.r,hr:c.hr,gz:false});
+}
+
+function spawnSafeZone(nearPlayer){
+  const isMid=PH[curPh].exam&&PH[curPh].month==='중간고사';
+  const shapes=['circle','rect'];
+  const shape=shapes[Math.floor(Math.random()*2)];
+  let w,h,r;
+  if(isMid){r=160+Math.random()*35;w=250+Math.random()*80;h=130+Math.random()*60;}
+  else{r=100+Math.random()*18;w=170+Math.random()*50;h=100+Math.random()*30;}
+  let x,y;
+  if(nearPlayer){
+    const offsetX=(Math.random()-.5)*100,offsetY=(Math.random()-.5)*80;
+    x=Math.max(80,Math.min(CW-80,Px+offsetX));
+    y=Math.max(120,Math.min(CH-80,Py+offsetY));
+  }else{
+    const margin=80;
+    x=margin+Math.random()*(CW-margin*2);
+    y=120+Math.random()*(CH-200);
+  }
+  safeZones.push({shape,x,y,w,h,r,life:3500,maxLife:3500,pulse:0});
+}
+
+function updateSafeZones(dt){
+  if(!PH[curPh].exam){safeZones=[];safeZoneTimer=0;return;}
+  safeZoneTimer+=dt;
+  if(safeZoneTimer>=SAFE_ZONE_INTERVAL&&safeZones.length===0){safeZoneTimer=0;spawnSafeZone();}
+  safeZones=safeZones.filter(z=>{z.life-=dt;z.pulse+=dt*.004;return z.life>0;});
+}
+
+function drawSafeZones(){
+  safeZones.forEach(z=>{
+    const alpha=Math.min(1,z.life/600)*.82;
+    const pulse=.85+Math.sin(z.pulse)*.15;
+    ctx.save();ctx.globalAlpha=alpha;
+    ctx.strokeStyle='#00FF88';ctx.lineWidth=2.5*pulse;ctx.setLineDash([6,4]);
+    if(z.shape==='circle'){
+      ctx.beginPath();ctx.arc(z.x,z.y,z.r*pulse,0,Math.PI*2);ctx.stroke();
+      ctx.globalAlpha=alpha*.18;ctx.fillStyle='#00FF88';
+      ctx.beginPath();ctx.arc(z.x,z.y,z.r*pulse,0,Math.PI*2);ctx.fill();
+    }else{
+      const hw=(z.w/2)*pulse,hh=(z.h/2)*pulse;
+      rrct(z.x-hw,z.y-hh,z.w*pulse,z.h*pulse,10);ctx.stroke();
+      ctx.globalAlpha=alpha*.18;ctx.fillStyle='#00FF88';
+      rrct(z.x-hw,z.y-hh,z.w*pulse,z.h*pulse,10);ctx.fill();
+    }
+    ctx.setLineDash([]);
+    ctx.globalAlpha=alpha*.9;
+    ctx.font='16px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('🛡️',z.x,z.y-8);
+    ctx.font='700 9px "Noto Sans KR",sans-serif';ctx.fillStyle='#00FF88';
+    ctx.fillText('SAFE',z.x,z.y+9);
+    ctx.restore();
+  });
+}
+
+function isInSafeZone(bx,by){
+  return safeZones.some(z=>{
+    if(z.shape==='circle')return Math.hypot(bx-z.x,by-z.y)<z.r;
+    else return bx>z.x-z.w/2&&bx<z.x+z.w/2&&by>z.y-z.h/2&&by<z.y+z.h/2;
+  });
+}
+
 function fire(){
   const ph=PH[curPh],bx=bossX(),by=bossY(),pa=Math.atan2(Py-by,Px-bx),wt=ph.wt;
   const roll=patPhase%3;
-  if(roll===0){const spread=.44;for(let i=0;i<3;i++)spawn(bx,by,pa-spread+(i*spread),wPick(i===1?WS:wt));}
+  if(roll===0){const spread=.44;for(let i=0;i<3;i++)spawn(bx,by,pa-spread+(i*spread),wPick(ph.exam?wt:i===1?WS:wt));}
   else if(roll===1){const n=8,rot=patPhase*(Math.PI/8);for(let i=0;i<n;i++)spawn(bx,by,(Math.PI*2/n)*i+rot,wPick(wt));}
-  else{spawn(bx,by,pa,wPick(WS));if(curPh>=2)spawn(bx,by,pa,'F');}
+  else{spawn(bx,by,pa,wPick(ph.exam?wt:WS));if(curPh>=2)spawn(bx,by,pa,'F');}
   patPhase++;
 }
 
-// 스파이럴 (원본 그대로)
 function spiralTick(dt){
   if(gTime<5)return;
   spT+=dt;
   const iv=Math.max(120,400-diff*.05);
   if(spT<iv)return;spT=0;
   const arms=PH[curPh].arms;
-  for(let i=0;i<arms;i++)spawn(bossX(),bossY(),spA+(Math.PI*2/arms)*i,wPick(i===0?WS:PH[curPh].wt),.85);
+  for(let i=0;i<arms;i++)spawn(bossX(),bossY(),spA+(Math.PI*2/arms)*i,wPick(PH[curPh].exam?PH[curPh].wt:i===0?WS:PH[curPh].wt),.85);
   spA+=.25;
 }
 
-// 페이즈
 function checkPhase(){
   let next=0;
   for(let i=PH.length-1;i>=0;i--){if(gTime>=PH[i].startT){next=i;break;}}
   if(next!==curPh){
-    curPh=next;initDecor(curPh);ann={on:true,a:0,t:0,ph:curPh};pTimer=0;spT=0;
+    const prevWasExam=PH[curPh].exam;
+    curPh=next;
+    if(prevWasExam){
+      bullets.forEach(b=>{if(b.letter==='F')b.fading=true;});
+    }
+    initDecor(curPh);
+    ann={on:true,a:0,t:0,ph:curPh};pTimer=0;spT=0;
     showAnnDOM(curPh);
     const p=PH[curPh];
     document.getElementById('hud-phase').textContent=p.month+' — '+p.name;
     document.getElementById('hud-phase').style.color=p.acc;
+    if(p.exam){safeZones=[];safeZoneTimer=0;spawnSafeZone(true);}
   }
 }
 
 function updateAnn(dt){
   if(!ann.on)return;
-  ann.t+=dt/1000;const t=ann.t;
-  let a;
+  ann.t+=dt/1000;const t=ann.t;let a;
   if(t<.4)a=t/.4;
   else if(t<2.5)a=1;
   else if(t<3.1)a=1-(t-2.5)/.6;
@@ -326,20 +547,19 @@ function updateAnn(dt){
   document.getElementById('ann-overlay').style.opacity=a;
 }
 
-function drawAnn(){
-  // DOM 오버레이로 대체됨 — 비워둠
-}
-
 function showAnnDOM(ph){
   const p=PH[ph];
   const overlay=document.getElementById('ann-overlay');
-  overlay.style.display='flex';
-  overlay.style.opacity=0;
+  overlay.style.display='flex';overlay.style.opacity=0;
   document.getElementById('ann-month').textContent=p.month;
   document.getElementById('ann-month').style.color=p.acc;
   document.getElementById('ann-name').textContent=p.name;
   document.getElementById('ann-quote').textContent=p.quote;
   document.getElementById('ann-card').style.borderColor=p.acc+'44';
+  const canvasWrap=document.getElementById('canvas-wrap');
+  const annCard=document.getElementById('ann-card');
+  if(p.exam){canvasWrap.classList.add('exam-mode');annCard.classList.add('hell');}
+  else{canvasWrap.classList.remove('exam-mode');annCard.classList.remove('hell');}
   const dotsEl=document.getElementById('ann-dots');
   dotsEl.innerHTML='';
   for(let i=0;i<PH.length;i++){
@@ -350,79 +570,78 @@ function showAnnDOM(ph){
   }
 }
 
-// 종강 엔딩 (원본 그대로)
 function triggerEnding(){
-  gameEnding=true;bullets=[];efx=[];
+  gameEnding=true;bullets=[];efx=[];safeZones=[];
   endAnn={on:true,a:0,t:0};
   const overlay=document.getElementById('end-overlay');
   overlay.style.display='flex';overlay.style.opacity=0;
   document.getElementById('end-card').style.borderColor='#FFD06044';
+  document.getElementById('end-overlay').classList.add('show');
 }
+
 function updateEndAnn(dt){
   if(!endAnn.on)return;
-  endAnn.t+=dt/1000;const t=endAnn.t;
-  let a;
+  endAnn.t+=dt/1000;const t=endAnn.t;let a;
   if(t<.4)a=t/.4;
   else if(t<2.8)a=1;
   else if(t<3.5)a=1-(t-2.8)/.7;
   else{endAnn.on=false;document.getElementById('end-overlay').style.display='none';running=false;setTimeout(showResult,100);return;}
   document.getElementById('end-overlay').style.opacity=a;
 }
-function drawEndAnn(){
-  
-}
 
-// HUD
 function updateHUD(){
-  document.getElementById('hb').style.width=Math.max(0,hp)+'%';
-  document.getElementById('hb').style.background=hp>60?'#00C471':hp>30?'#E8C000':'#D02030';
   document.getElementById('sn').textContent=score.toLocaleString();
   document.getElementById('hud-graze').textContent='그레이즈 '+graze;
-  document.getElementById('hud-hp-num').textContent=Math.max(0,Math.round(hp))+'/100';
+  document.getElementById('hp-side-fill').style.height=Math.max(0,hp)+'%';
+  document.getElementById('hp-side-fill').style.background=hp>60?'#00C471':hp>30?'#E8C000':'#D02030';
+  document.getElementById('hp-side-num').textContent=Math.max(0,Math.round(hp));
 }
 
-// 렌더 (shadowBlur 없음 → 렉 해결)
 function draw(){
   ctx.clearRect(0,0,CW,CH);
-  drawDecor();
+  if(!PH[curPh].exam)drawDecor();
+  drawSafeZones();
   const p=PH[curPh];
   const BX=bossX(),BY=bossY();
   ctx.fillStyle=p.acc+'0a';ctx.beginPath();ctx.arc(BX,BY,52,0,Math.PI*2);ctx.fill();
   if(curPh>=2){const pulse=.07+.05*Math.sin(Date.now()*.007);ctx.strokeStyle=p.acc+Math.floor(pulse*600).toString(16).padStart(2,'0');ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(BX,BY,44,0,Math.PI*2);ctx.stroke();}
-  ctx.fillStyle='rgba(255,255,255,.05)';rrct(BX-50,BY-25,100,50,12);ctx.fill();
-  ctx.strokeStyle=p.acc+'28';ctx.lineWidth=1;ctx.stroke();
-  ctx.font='27px serif';ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillText(gender==='female'?'👩‍🏫':'👨‍🏫',BX,BY);
-  ctx.font='700 9px "Noto Sans KR",sans-serif';ctx.fillStyle='rgba(255,255,255,.55)';ctx.textBaseline='alphabetic';ctx.fillText((prof||'담당')+'교수',BX,BY+38);
+  const profImg = gender === 'female' ? femaleProfImg : maleProfImg;
+  const ps = 54;
+  ctx.drawImage(profImg, BX - ps/2, BY - ps/2, ps, ps);
+  ctx.font='700 9px "Noto Sans KR",sans-serif';ctx.fillStyle='rgba(255,255,255,.55)';ctx.textBaseline='alphabetic';
+  ctx.fillText((prof||'담당')+'교수',BX,BY+38);
 
-  // 탄막 (원본 렌더 방식, shadowBlur 없음)
   bullets.forEach(b=>{
+    ctx.globalAlpha=b.alpha??1;
     ctx.strokeStyle=b.c+'50';ctx.lineWidth=2;ctx.beginPath();ctx.arc(b.x,b.y,b.r+3,0,Math.PI*2);ctx.stroke();
     ctx.fillStyle=b.bg;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();
     ctx.strokeStyle=b.c;ctx.lineWidth=1.5;ctx.stroke();
     ctx.font='900 '+(b.r*1.0)+'px "Noto Sans KR",sans-serif';
     ctx.fillStyle=b.tc;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(b.letter,b.x,b.y+1);
+    ctx.globalAlpha=1;
   });
 
-  // 플레이어
-  ctx.font='32px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🎓',Px,Py);
+  const size = 40;
+  ctx.drawImage(lionImg, Px - size/2, Py - size/2, size, size);
   ctx.strokeStyle='rgba(255,255,255,.5)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(Px,Py,HR+2.5,0,Math.PI*2);ctx.stroke();
   ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(Px,Py,HR,0,Math.PI*2);ctx.fill();
   if(keys['Shift']||keys['shift']){ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=1;ctx.setLineDash([3,4]);ctx.beginPath();ctx.arc(Px,Py,GZR,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);}
-  ctx.font='700 9px "Noto Sans KR",sans-serif';ctx.fillStyle='rgba(255,255,255,.45)';ctx.textAlign='center';ctx.textBaseline='alphabetic';ctx.fillText('즈인공',Px,Py+24);
+  ctx.font='700 9px "Noto Sans KR",sans-serif';ctx.fillStyle='rgba(255,255,255,.45)';ctx.textAlign='center';ctx.textBaseline='alphabetic';
 
   efx.forEach(e=>{ctx.globalAlpha=e.l;ctx.font='800 '+e.s+'px "Noto Sans KR",sans-serif';ctx.fillStyle=e.c;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(e.t,e.x,e.y);});
   ctx.globalAlpha=1;
-  drawAnn();
-  drawEndAnn();
 }
 
-// 게임 루프 (원본 그대로)
 function loop(ts){
   if(!running)return;
   const dt=lastT?Math.min(ts-lastT,50):16;
-  lastT=ts;gTime+=dt/1000;diff+=dt;
-  checkPhase();updateDecor();updateAnn(dt);
+  lastT=ts;
+  gTime+=dt/1000;diff+=dt;
+  if(!gameEnding){
+    hp=Math.max(0,hp-1.3*(dt/1000));
+    if(hp<=0){hp=0;running=false;setTimeout(showResult,400);}
+  }
+  checkPhase();updateDecor();updateAnn(dt);updateSafeZones(dt);
   const ph=PH[curPh];
   if(gTime>=GAME_END_TIME&&!gameEnding)triggerEnding();
   if(gameEnding)updateEndAnn(dt);
@@ -448,11 +667,15 @@ function loop(ts){
     Px=Math.max(12,Math.min(CW-12,Px));Py=Math.max(12,Math.min(CH-12,Py));
   }
   bullets=bullets.filter(b=>{
+    if(b.fading){b.alpha-=dt/500;if(b.alpha<=0)return false;}
     b.x+=b.vx;b.y+=b.vy;
     if(b.x<-40||b.x>CW+40||b.y<-40||b.y>CH+40)return false;
     const d=Math.hypot(b.x-Px,b.y-Py);
-    if(d<b.hr+HR){
-      const f=FX[b.letter];hp=Math.max(0,Math.min(100,hp+f));
+    const playerSafe=b.letter==='F'&&isInSafeZone(Px,Py);
+    if(!playerSafe&&d<b.hr+HR){
+      if(ann.on)return false;
+      let f=FX[b.letter];
+      hp=Math.max(0,Math.min(100,hp+f));
       score+=SFX[b.letter];
       efx.push({x:b.x,y:b.y,vx:(Math.random()-.5)*1.5,vy:-2.3,l:1,c:f>0?'#00C471':'#FF5C6A',t:f>0?'+'+f+'HP':b.letter==='F'?'💀':f+'HP',s:13});
       if(b.letter==='F'||hp<=0){hp=0;running=false;setTimeout(showResult,400);return false;}
@@ -467,39 +690,59 @@ function loop(ts){
   raf=requestAnimationFrame(loop);
 }
 
-// 결과 (원본 그대로)
+// 결과
 function showResult(){
+  bgm.pause();  // ← 추가
   document.getElementById('game-screen').style.display='none';
-  let g,e,m,bg,fg;
-  if(score>=4000){g='A+';e='🏆';m='"감탄했다. 네가 최고야."';bg='#0a2a1a';fg='#00C471';}
-  else if(score>=2800){g='A';e='🎯';m='"훌륭해. 학문에 정진하게나."';bg='#0a2a1a';fg='#00C471';}
-  else if(score>=1900){g='B+';e='👍';m='"조금만 더 하면 A가 보인다."';bg='#0a1a30';fg='#3182F6';}
-  else if(score>=1200){g='B';e='📚';m='"그럭저럭. 좀 더 분발하게."';bg='#0a1a30';fg='#3182F6';}
-  else if(score>=650){g='C+';e='😅';m='"수업은 들었나? 보충 필요해."';bg='#2a2000';fg='#D4B800';}
-  else if(score>=320){g='C';e='😬';m='"재수강을 강력히 권장하겠어."';bg='#2a2000';fg='#D4B800';}
-  else if(score>=120){g='D';e='😰';m='"자네… 많이 반성하게나."';bg='#2a1400';fg='#E06000';}
-  else{g='F';e='💀';m='"학사경고야. 진심으로 걱정되네."';bg='#1a0808';fg='#FF5C6A';}
-  const rb=document.getElementById('rbg');
-  rb.style.background=bg;rb.style.border='2px solid '+fg+'55';
-  rb.innerHTML='<span style="font-size:28px;font-weight:900;color:'+fg+'">'+g+'</span>';
-  document.getElementById('rby').textContent=e+' '+(prof||'담당')+' 교수님의 판정';
+  let g,m;
+  if(score>=4000){g='A+';m='"감탄했다. 네가 최고야."';}
+  else if(score>=2800){g='A';m='"훌륭해. 학문에 정진하게나."';}
+  else if(score>=1900){g='B+';m='"조금만 더 하면 A가 보인다."';}
+  else if(score>=1200){g='B';m='"그럭저럭. 좀 더 분발하게."';}
+  else if(score>=650){g='C+';m='"수업은 들었나? 보충 필요해."';}
+  else if(score>=320){g='C';m='"재수강을 강력히 권장하겠어."';}
+  else if(score>=120){g='D';m='"자네… 많이 반성하게나."';}
+  else{g='F';m='"학사경고야. 진심으로 걱정되네."';}
+  document.getElementById('res-school').textContent=(window._selectedSchool||'○○대학교');
+  document.getElementById('rby').textContent='담당 교수 : '+(prof||'담당');
   document.getElementById('rqt').textContent=m;
-  document.getElementById('rv0').textContent=score.toLocaleString()+'점';
-  document.getElementById('rv1').textContent=Math.floor(gTime)+'초';
-  document.getElementById('rv2').textContent=graze+'회';
-  const cp=PH[curPh];
-  document.getElementById('rv3').textContent=cp.month+' '+cp.name;
-  document.getElementById('rv3').style.color=cp.acc;
+  document.getElementById('rv0').textContent=score.toLocaleString();
+  const mins=Math.floor(gTime/60),secs=Math.floor(gTime%60);
+  document.getElementById('rv1').textContent=mins>0?mins+'분 '+secs+'초':secs+'초';
+  document.getElementById('res-rank').textContent='집계 중...';
+  const rb=document.getElementById('rbg');
+  rb.textContent=g;rb.style.color='#c8302a';rb.style.borderColor='#c8302a';
+  document.getElementById('rank-section').innerHTML='<div class="rank-loading">🔄 랭킹 불러오는 중...</div>';
   document.getElementById('s2').style.display='flex';
+  if(window._saveAndRank&&window._selectedSchool){window._saveAndRank(window._selectedSchool,score);}
 }
 
-// 시작
+window.shareResult=function(){
+  const school=window._selectedSchool||'○○대학교';
+  const g=document.getElementById('rbg').textContent;
+  const sc=document.getElementById('rv0').textContent;
+  const t=document.getElementById('rv1').textContent;
+  const txt='[학점 피하기] '+school+'\n최종 점수: '+sc+'점 | 생존: '+t+'\n등급: '+g;
+  if(navigator.share){navigator.share({text:txt});}
+  else if(navigator.clipboard){navigator.clipboard.writeText(txt).then(function(){alert('클립보드에 복사됐어요! 📋');});}
+  else{alert(txt);}
+};
+
 function startGame(){
+  bgm.currentTime = 0;  // ← 추가 (다시 도전할 때 처음부터)
+  bgm.play();           // ← 추가
+  const schoolEl=document.getElementById('school-select');
+  if(!schoolEl.value){alert('소속 대학교를 선택해주세요!');return;}
+  window._selectedSchool=schoolEl.value;
   prof=document.getElementById('pi').value.trim()||'담당';
   hp=100;score=0;graze=0;gTime=0;diff=0;
   bullets=[];efx=[];keys={};touch={x:null,y:null};
+  safeZones=[];safeZoneTimer=0;
   lastT=0;pTimer=0;patPhase=0;spA=0;spT=0;
   curPh=0;ann={on:true,a:0,t:0,ph:0};endAnn={on:false,a:0,t:0};gameEnding=false;fireTurn='pattern';
+  // exam-mode 초기화
+  document.getElementById('canvas-wrap').classList.remove('exam-mode');
+  document.getElementById('ann-card').classList.remove('hell');
   showAnnDOM(0);
   document.getElementById('s0').style.display='none';
   document.getElementById('s2').style.display='none';
@@ -515,7 +758,14 @@ function startGame(){
   running=true;cancelAnimationFrame(raf);
   raf=requestAnimationFrame(loop);
 }
-function goHome(){running=false;cancelAnimationFrame(raf);document.getElementById('game-screen').style.display='none';document.getElementById('s2').style.display='none';document.getElementById('s0').style.display='flex';}
+
+function goHome(){
+  running=false;cancelAnimationFrame(raf);
+  document.getElementById('canvas-wrap').classList.remove('exam-mode');
+  document.getElementById('game-screen').style.display='none';
+  document.getElementById('s2').style.display='none';
+  document.getElementById('s0').style.display='flex';
+}
 
 window.startGame=startGame;
 document.getElementById('rb2').addEventListener('click',startGame);
@@ -529,6 +779,61 @@ wrap2.addEventListener('touchmove',function(e){const t=e.touches[0],r=wrap2.getB
 wrap2.addEventListener('touchend',function(){touch={x:null,y:null};});
 window.addEventListener('resize',function(){if(running)resizeCanvas();});
 })();
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, query, where, orderBy, limit, getDocs, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDp7zGsHZR2H4_Gzx4Pf2XOlJXGAHoZPDg",
+  authDomain: "animal-league-41137.firebaseapp.com",
+  projectId: "animal-league-41137",
+  storageBucket: "animal-league-41137.firebasestorage.app",
+  messagingSenderId: "173619560796",
+  appId: "1:173619560796:web:123937cb9d333e2e354199",
+  measurementId: "G-2C5YQTXHS7"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window._saveAndRank = async function(school, score) {
+  const rankEl = document.getElementById('rank-section');
+  try {
+    await addDoc(collection(db, 'scores'), {
+      school, score, createdAt: serverTimestamp()
+    });
+    const q = query(
+      collection(db, 'scores'),
+      where('school', '==', school),
+      orderBy('score', 'desc'),
+      limit(10)
+    );
+    const snap = await getDocs(q);
+    const rows = snap.docs.map(d => d.data());
+    let myRank = 1;
+    for (const r of rows) { if (r.score > score) myRank++; }
+    document.getElementById('res-rank').textContent = myRank + '등';
+    const medals = ['🥇','🥈','🥉'];
+    const items = rows.map((r, i) => {
+      const isMe = r.score === score;
+      return `<div class="rank-item${isMe?' me':''}">
+        <span class="rank-medal">${medals[i] || (i+1)+'위'}</span>
+        <span class="rank-score">${r.score.toLocaleString()}점${isMe?' &nbsp;← 나':''}</span>
+      </div>`;
+    }).join('');
+    rankEl.innerHTML = `
+      <div class="rank-title">
+        🏫 ${school} 랭킹
+        <span class="rank-me">내 순위 ${myRank}위</span>
+      </div>
+      ${items}`;
+  } catch(e) {
+    console.warn('Firebase 오류:', e);
+    rankEl.innerHTML = '<div class="rank-loading">랭킹을 불러오지 못했어요 😥</div>';
+  }
+};
 </script>
 </body>
 </html>
