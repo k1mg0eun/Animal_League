@@ -6,38 +6,49 @@
 <title>교수님이 던지는 학점 피하기</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap');
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-:root{--bg:#1e2140;--blue:#6c7bff;--green:#4ade80;--red:#f87171;--sub:rgba(255,255,255,.5);}
-body{background:var(--bg);display:flex;justify-content:center;align-items:flex-start;min-height:100vh;font-family:'Noto Sans KR',-apple-system,sans-serif;overflow-x:hidden;}
-#wrap{width:100%;max-width:900px;min-height:100vh;display:flex;flex-direction:column;}
+@font-face {
+  font-family: 'DungGeunMo';
+  font-style: normal;
+  font-weight: 400;
+  src: url('neodgm.woff2') format('woff2'),
+       url('neodgm.woff') format('woff');
+}
 
-/* ── START */
-#s0{display:flex;flex-direction:column;align-items:center;padding:48px 20px 60px;}
-.s0-hero{text-align:center;margin-bottom:32px;}
-.s0-cap{font-size:54px;display:block;margin-bottom:14px;animation:float 3s ease-in-out infinite;}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.s0-title{font-size:30px;font-weight:900;color:#fff;letter-spacing:-1px;}
-.s0-sub{font-size:13px;color:var(--sub);margin-top:6px;}
-.s0-form{width:100%;max-width:560px;display:flex;flex-direction:column;gap:18px;}
-.fl{font-size:13px;font-weight:700;color:rgba(255,255,255,.7);margin-bottom:7px;}
-.fi{width:100%;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.11);border-radius:13px;padding:15px 17px;font-family:inherit;font-size:15px;font-weight:500;color:#fff;outline:none;transition:border-color .2s;}
-.fi::placeholder{color:rgba(255,255,255,.22);font-weight:400;}
-.fi:focus{border-color:var(--blue);}
-select.fi{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.4)' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;}
-select.fi option{background:#1e2140;color:#fff;}
-.gender-row{display:flex;gap:10px;}
-.gb2{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:13px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:rgba(255,255,255,.45);font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:all .18s;}
-.gb2:hover{background:rgba(255,255,255,.09);color:rgba(255,255,255,.8);}
-.gb2.on{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 4px 18px rgba(108,123,255,.4);}
-#start-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:17px;background:rgba(255,255,255,.09);border:1.5px solid rgba(255,255,255,.13);border-radius:14px;color:rgba(255,255,255,.6);font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;}
-#start-btn:hover{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 6px 22px rgba(108,123,255,.38);}
-.how-card{width:100%;max-width:560px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:22px;margin-top:22px;}
-.how-title{font-size:15px;font-weight:800;color:#fff;margin-bottom:16px;}
-.how-list{display:flex;flex-direction:column;gap:13px;}
-.how-item{display:flex;align-items:center;gap:13px;font-size:13.5px;color:rgba(255,255,255,.72);}
-.how-ico{font-size:19px;width:26px;text-align:center;flex-shrink:0;}
-.hl-g{color:var(--green);font-weight:700;}
-.hl-r{color:var(--red);font-weight:700;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-family:'DungGeunMo','Noto Sans KR',sans-serif !important;}
+:root{--bg:#1e2140;--blue:#6c7bff;--green:#4ade80;--red:#f87171;--sub:rgba(255,255,255,.5);}
+body{background:var(--bg);display:flex;justify-content:center;align-items:flex-start;min-height:100vh;font-family:'DungGeunMo',-apple-system,sans-serif;overflow-x:hidden;}
+#wrap{width:100%;max-width:600px;min-height:100vh;display:flex;flex-direction:column;}
+
+/* ── START (connect 디자인) */
+#s0{display:flex;flex-direction:column;align-items:center;min-height:100vh;width:100%;position:relative;overflow-x:hidden;background:transparent;}
+
+#s0-bg{position:absolute;inset:0;background-image:url('background.png');background-size:cover;background-position:center top;background-repeat:no-repeat;z-index:0;}
+#s0-bg::after{content:none;}
+.s0-photo-layer{display:none;}
+
+.s0-title-wrap{position:relative;z-index:2;text-align:center;margin-top:160px;}
+.s0-tagline{font-family:'DungGeunMo',sans-serif;font-size:22px;color:#1a1a1a;line-height:1.2;text-shadow:1px 1px 0 rgba(255,255,255,.6);}
+.s0-title{font-family:'DungGeunMo',sans-serif;font-size:44px;line-height:1.1;letter-spacing:-1px;text-shadow:-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff,2px 2px 0 #fff,4px 4px 10px rgba(0,0,0,.2);}
+.s0-title .word-grade{color:#ed1818;font-size:48px;}
+.s0-title .word-avoid{color:#1a1a1a;}
+
+.s0-panel{position:relative;z-index:2;width:calc(100% - 32px);max-width:339px;margin-top:20px;border-radius:16px;overflow:hidden;background:url('background.png') center/cover no-repeat !important;border:4px solid #8B5E3C;box-shadow:0 0 0 2px #5a3820,inset 0 0 0 2px rgba(255,200,120,.15),0 8px 32px rgba(0,0,0,.45);}
+.s0-panel::before{content:'';position:absolute;inset:0;z-index:0;background-color:rgba(160,80,30,.82);background-image:repeating-linear-gradient(0deg,transparent,transparent 22px,rgba(0,0,0,.18) 22px,rgba(0,0,0,.18) 25px),repeating-linear-gradient(90deg,transparent,transparent 44px,rgba(0,0,0,.12) 44px,rgba(0,0,0,.12) 47px);pointer-events:none;}
+.s0-panel::after{content:'';position:absolute;inset:0;z-index:0;background-image:repeating-linear-gradient(90deg,transparent,transparent 44px,rgba(0,0,0,.12) 44px,rgba(0,0,0,.12) 47px);background-size:47px 50px;background-position:23px 25px;pointer-events:none;}
+.s0-panel-bg{display:none;}
+
+.s0-form{position:relative;z-index:2;display:flex;flex-direction:column;gap:24px;padding:30px 16px;}
+.fl{font-family:'DungGeunMo',sans-serif;font-size:16px;color:#fff;margin-bottom:8px;line-height:20px;}
+.fi{width:100%;background:#fff;border:none;border-radius:14px;padding:12px 16px;font-family:'DungGeunMo',sans-serif;font-size:16px;color:#434343;outline:none;height:48px;-webkit-appearance:none;appearance:none;}
+.fi::placeholder{color:#999;}
+.fi-select-wrap{position:relative;}
+.fi-select-wrap::after{content:'▼';position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:11px;color:#888;pointer-events:none;}
+.gender-row{display:flex;gap:12px;}
+.gb2{flex:1;display:flex;align-items:center;justify-content:center;height:48px;border-radius:14px;border:none;background:#fff;color:#434343;font-family:'DungGeunMo',sans-serif;font-size:16px;cursor:pointer;transition:all .18s;}
+.gb2.on{background:#e8eaff;color:#4053a5;box-shadow:0 3px 12px rgba(64,83,165,.25);}
+#start-btn{display:flex;align-items:center;justify-content:center;gap:11px;width:100%;height:48px;background:#fff;border:none;border-radius:14px;color:#4053a5;font-family:'DungGeunMo',sans-serif;font-size:18px;cursor:pointer;transition:all .2s;}
+#start-btn:hover{background:#4053a5;color:#fff;}
+.s0-credit{position:relative;z-index:2;font-size:12px;color:rgba(255,255,255,.85);margin-top:16px;}
 
 /* ── GAME */
 #game-screen{display:none;flex-direction:column;width:100%;height:100vh;overflow:hidden;}
@@ -45,22 +56,16 @@ select.fi option{background:#1e2140;color:#fff;}
 .hud-top{display:flex;align-items:center;gap:11px;}
 .hud-av{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:2px solid rgba(255,255,255,.1);}
 .hud-info{display:flex;flex-direction:column;}
-.hud-name{font-size:14px;font-weight:800;color:#2c2c2c;line-height:1.2;}
+.hud-name{font-size:14px;font-weight:800;color:#fff;line-height:1.2;}
 .hud-phase{font-size:10.5px;color:var(--sub);}
 .hud-right{margin-left:auto;display:flex;align-items:center;gap:14px;}
-.hud-graze{font-size:11px;font-weight:700;color:#fbbf24;}
 .hud-score-wrap{display:flex;flex-direction:column;align-items:flex-end;}
 .hud-score{font-size:17px;font-weight:900;color:#fff;line-height:1;}
 .hud-score-lbl{font-size:8.5px;color:var(--sub);}
-.hud-hp-row{display:flex;align-items:center;gap:9px;flex:1;max-width:400px;}
 #hp-side{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:240px;background:rgba(0,0,0,.35);border-radius:100px;z-index:5;box-shadow:0 2px 12px rgba(0,0,0,.5);display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;}
 #hp-side-fill{width:100%;height:100%;background:#00C471;border-radius:100px;transition:height .3s,background .3s;}
 #hp-side-num{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:800;color:#fff;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.8);}
 #hp-side-lbl{position:absolute;bottom:-36px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:700;color:rgba(255,255,255,.6);text-shadow:0 1px 3px rgba(0,0,0,.8);}
-.hud-hp-lbl{font-size:11px;font-weight:700;color:var(--sub);width:20px;}
-.hud-hp-bar{flex:1;height:7px;background:rgba(255,255,255,.1);border-radius:100px;overflow:hidden;}
-#hb{height:100%;border-radius:100px;background:var(--red);transition:width .25s,background .25s;}
-.hud-hp-num{font-size:10.5px;font-weight:700;color:rgba(255,255,255,.6);min-width:48px;text-align:right;}
 
 /* CANVAS */
 #canvas-wrap{flex:1;position:relative;overflow:hidden;}
@@ -69,23 +74,10 @@ select.fi option{background:#1e2140;color:#fff;}
 #cv{position:absolute;inset:0;display:block;width:100%;height:100%;z-index:2;}
 
 /* ── 시험 페이즈 지옥 배경 */
-#hell-overlay{
-  position:absolute;inset:0;pointer-events:none;z-index:1;
-  background:radial-gradient(ellipse at center,rgba(60,0,0,0) 30%,rgba(120,0,0,.45) 100%);
-  transition:background 1.5s ease,opacity 1.5s ease;
-  opacity:0;
-}
-#canvas-wrap.exam-mode::before{
-  background:linear-gradient(180deg,#0d0008 0%,#1a0010 25%,#2a0015 50%,#1a0008 75%,#0d0005 100%) !important;
-}
+#hell-overlay{position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(ellipse at center,rgba(60,0,0,0) 30%,rgba(120,0,0,.45) 100%);transition:background 1.5s ease,opacity 1.5s ease;opacity:0;}
+#canvas-wrap.exam-mode::before{background:linear-gradient(180deg,#0d0008 0%,#1a0010 25%,#2a0015 50%,#1a0008 75%,#0d0005 100%) !important;}
 #canvas-wrap.exam-mode #hell-overlay{opacity:1;}
-
-/* 시험 안내 카드 — 지옥 스타일 */
-.ann-card.hell{
-  background:rgba(30,0,0,.95);
-  border-color:#ff2200 !important;
-  box-shadow:0 0 40px rgba(255,30,0,.35),inset 0 0 30px rgba(80,0,0,.5);
-}
+.ann-card.hell{background:rgba(30,0,0,.95);border-color:#ff2200 !important;box-shadow:0 0 40px rgba(255,30,0,.35),inset 0 0 30px rgba(80,0,0,.5);}
 .ann-card.hell .ann-name{color:#ff4444;text-shadow:0 0 12px rgba(255,0,0,.8);}
 .ann-card.hell .ann-month{color:#ff6060 !important;}
 .ann-card.hell .ann-quote{color:rgba(255,180,180,.6);}
@@ -93,64 +85,40 @@ select.fi option{background:#1e2140;color:#fff;}
 /* ── RESULT */
 @keyframes popIn{0%{transform:scale(.88) rotate(-1.5deg);opacity:0}100%{transform:scale(1) rotate(-1.5deg);opacity:1}}
 @keyframes stampIn{0%{transform:rotate(-12deg) scale(0);opacity:0}70%{transform:rotate(-12deg) scale(1.15)}100%{transform:rotate(-12deg) scale(1);opacity:1}}
-
-#s2{
-  display:none;flex-direction:column;align-items:center;
-  min-height:100vh;padding:32px 20px 48px;gap:18px;
-  background:#2d4a3a;
-  background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
-  background-size:26px 26px;
-}
-
+#s2{display:none;flex-direction:column;align-items:center;min-height:100vh;padding:140px 20px 48px;gap:18px;background:#2d4a3a;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:26px 26px;}
 .res-paper{width:100%;max-width:360px;position:relative;transform:rotate(-1.5deg);animation:popIn .55s cubic-bezier(.34,1.56,.64,1) both;}
 .res-torn-top,.res-paper-body,.res-torn-bottom{position:relative;z-index:1;}
 .res-torn-top{width:100%;height:14px;background:#f2edda;border-radius:6px 6px 0 0;}
 .res-torn-bottom{width:100%;height:14px;background:#f2edda;border-radius:0 0 6px 6px;}
-.res-paper-body{
-  background:#f2edda;padding:18px 22px 22px 30px;position:relative;
-  border-left:3px solid #ddd0b0;border-right:3px solid #ddd0b0;
-}
-.res-paper-body::before{
-  content:'';position:absolute;left:-2px;top:0;bottom:0;width:4px;
-  background:repeating-linear-gradient(180deg,transparent 0,transparent 26px,#b8a878 26px,#b8a878 30px);
-}
+.res-paper-body{background:#f2edda;padding:18px 22px 22px 30px;position:relative;border-left:3px solid #ddd0b0;border-right:3px solid #ddd0b0;}
+.res-paper-body::before{content:'';position:absolute;left:-2px;top:0;bottom:0;width:4px;background:repeating-linear-gradient(180deg,transparent 0,transparent 26px,#b8a878 26px,#b8a878 30px);}
 .res-school-name{font-size:12px;font-weight:700;color:#666;text-align:center;margin-bottom:3px;letter-spacing:.5px;}
 .res-paper-title{font-size:24px;font-weight:900;color:#1a1a1a;text-align:center;margin-bottom:6px;letter-spacing:-1px;}
 .res-paper-prof{font-size:13px;color:#555;text-align:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1.5px solid #c8b888;}
-.res-paper-rows{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
-.res-paper-row{display:flex;align-items:baseline;gap:0;font-size:16px;font-weight:700;color:#1a1a1a;letter-spacing:.2px;font-family:'Noto Sans KR',sans-serif;}
+.res-paper-rows{display:flex;flex-direction:column;gap:18px;margin-bottom:22px;}
+.res-paper-row{display:flex;align-items:baseline;font-size:16px;font-weight:700;color:#1a1a1a;letter-spacing:.2px;}
 .res-paper-row .r-lbl{width:90px;flex-shrink:0;}
 .res-paper-row .r-sep{margin:0 8px;color:#555;font-weight:400;}
 .res-paper-row .r-val{font-weight:900;color:#1a1a1a;}
 .res-paper-row .r-val.red{color:#c8302a;}
 .res-paper-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;}
 .res-paper-quote{font-size:11px;font-weight:700;color:#c8302a;line-height:1.7;max-width:170px;}
-.res-stamp{
-  width:76px;height:76px;flex-shrink:0;border-radius:50%;
-  border:3.5px dashed #c8302a;display:flex;align-items:center;justify-content:center;
-  font-size:36px;font-weight:900;color:#c8302a;transform:rotate(-12deg);opacity:.82;
-  animation:stampIn .6s cubic-bezier(.34,1.56,.64,1) .35s both;position:relative;
-  box-shadow:inset 0 0 0 1px rgba(200,48,42,.2);font-family:'Noto Sans KR',sans-serif;
-}
+.res-stamp{width:76px;height:76px;flex-shrink:0;border-radius:50%;border:3.5px dashed #c8302a;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:900;color:#c8302a;transform:rotate(-12deg);opacity:.82;animation:stampIn .6s cubic-bezier(.34,1.56,.64,1) .35s both;position:relative;box-shadow:inset 0 0 0 1px rgba(200,48,42,.2);}
 .res-stamp::after{content:'';position:absolute;inset:-5px;border-radius:50%;border:1px dashed rgba(200,48,42,.3);}
-.res-btns{width:100%;max-width:360px;display:flex;flex-direction:column;gap:10px;}
-#share-btn{
-  font-family:inherit;font-size:15px;font-weight:700;width:100%;padding:16px;
-  background:#fff;color:#333;border:none;border-radius:14px;cursor:pointer;transition:transform .1s;
-  display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 10px rgba(0,0,0,.18);
-}
+.res-btns{width:100%;max-width:360px;display:flex;flex-direction:column;gap:18px;}
+#share-btn{font-family:inherit;font-size:15px;font-weight:700;width:100%;padding:12px 16px;background:#fff;color:#333;border:none;border-radius:14px;cursor:pointer;transition:transform .1s;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 10px rgba(0,0,0,.18);}
 #share-btn:active{transform:scale(.98);}
 .res-btn-row{display:flex;gap:10px;}
-#rb2{font-family:inherit;font-size:13.5px;font-weight:700;flex:1;padding:14px;background:rgba(255,255,255,.13);color:#fff;border:1.5px solid rgba(255,255,255,.28);border-radius:14px;cursor:pointer;transition:transform .1s;display:flex;align-items:center;justify-content:center;gap:5px;}
+#rb2{font-family:inherit;font-size:13.5px;font-weight:700;flex:1;padding:11px 14px;background:rgba(255,255,255,.13);color:#fff;border:1.5px solid rgba(255,255,255,.28);border-radius:14px;cursor:pointer;transition:transform .1s;display:flex;align-items:center;justify-content:center;gap:5px;}
 #rb2:active{transform:scale(.98);}
-#hb2{font-family:inherit;font-size:13.5px;font-weight:700;flex:1;padding:14px;background:rgba(255,255,255,.13);color:#fff;border:1.5px solid rgba(255,255,255,.28);border-radius:14px;cursor:pointer;transition:transform .1s;display:flex;align-items:center;justify-content:center;gap:5px;}
+#hb2{font-family:inherit;font-size:13.5px;font-weight:700;flex:1;padding:11px 14px;background:rgba(255,255,255,.13);color:#fff;border:1.5px solid rgba(255,255,255,.28);border-radius:14px;cursor:pointer;transition:transform .1s;display:flex;align-items:center;justify-content:center;gap:5px;}
 #hb2:active{transform:scale(.98);}
-.rank-section{width:100%;max-width:360px;}
+.rank-section{width:100%;max-width:360px;margin-top:20px;}
 .rank-title{font-size:12px;font-weight:800;color:rgba(255,255,255,.45);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
 .rank-me{color:#8bc4a8;font-size:11px;}
 .rank-item{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-radius:10px;margin-bottom:5px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:12.5px;}
 .rank-item.me{background:rgba(139,196,168,.18);border-color:rgba(139,196,168,.4);}
-.rank-medal{width:22px;text-align:center;font-size:13px;}
+.rank-medal{width:22px;text-align:center;font-size:13px;color:rgba(255,255,255,.7);}
 .rank-score{font-weight:500;color:rgba(255,255,255,.6);}
 .rank-item.me .rank-score{font-weight:900;color:#fff;}
 .rank-loading{font-size:12px;color:rgba(255,255,255,.3);text-align:center;padding:16px;}
@@ -170,74 +138,75 @@ select.fi option{background:#1e2140;color:#fff;}
 <body>
 <div id="wrap">
 
-<!-- ── START -->
+<!-- ── START (connect 디자인) -->
 <div id="s0">
-  <div class="s0-hero">
-    <span class="s0-cap">🎓</span>
-    <div class="s0-title">학점 지키기 프로젝트</div>
-    <div class="s0-sub">교수님으로부터 한 학기를 살아남아보자!</div>
+  <div id="s0-bg"></div>
+  <div class="s0-photo-layer"></div>
+
+  <div class="s0-title-wrap">
+    <div class="s0-tagline">교수님이 던지는</div>
+    <div class="s0-title">
+      <span class="word-grade">학점</span><span class="word-avoid"> 피하기</span>
+    </div>
   </div>
-  <div class="s0-form">
-    <div>
-      <div class="fl">소속 대학교</div>
-      <select id="school-select" class="fi">
-        <option value="" disabled selected>대학교를 선택해주세요</option>
-        <option>가천대학교</option><option>가톨릭대학교</option><option>강남대학교</option>
-        <option>경기대학교</option><option>경남대학교</option><option>경북대학교</option>
-        <option>경상국립대학교</option><option>경성대학교</option><option>경희대학교</option>
-        <option>계명대학교</option><option>고려대학교(서울)</option><option>고려대학교(세종)</option>
-        <option>공주대학교(천안)</option><option>광운대학교</option><option>국립창원대학교</option>
-        <option>국민대학교</option><option>금오공과대학교</option><option>단국대학교</option>
-        <option>대구대학교</option><option>덕성여자대학교</option><option>동국대학교</option>
-        <option>동덕여자대학교</option><option>동아대학교</option><option>명지대학교(인문)</option>
-        <option>명지대학교(자연)</option><option>백석대학교</option><option>삼육대학교</option>
-        <option>상명대학교(서울)</option><option>상명대학교(천안)</option><option>서강대학교</option>
-        <option>서경대학교</option><option>서울과학기술대학교</option><option>서울대학교</option>
-        <option>서울시립대학교</option><option>서울여자대학교</option><option>서울예술대학교</option>
-        <option>서일대학교</option><option>성결대학교</option><option>성공회대학교</option>
-        <option>성균관대학교</option><option>성신여자대학교</option><option>선문대학교</option>
-        <option>숙명여자대학교</option><option>순천대학교</option><option>순천향대학교</option>
-        <option>숭실대학교</option><option>신한대학교</option><option>수원대학교</option>
-        <option>연세대학교</option><option>연세대학교(미래)</option><option>연암공과대학교</option>
-        <option>영남대학교</option><option>을지대학교</option><option>이화여자대학교</option>
-        <option>인천대학교</option><option>인하공업전문대학</option><option>인하대학교</option>
-        <option>전북대학교</option><option>제주대학교</option><option>중부대학교</option>
-        <option>중앙대학교</option><option>청주대학교</option><option>충남대학교</option>
-        <option>충북대학교</option><option>태재대학교</option><option>평택대학교</option>
-        <option>한국공학대학교</option><option>한국교통대학교</option><option>한국기술교육대학교</option>
-        <option>한국외국어대학교</option><option>한국외국어대학교(글로벌)</option><option>한국항공대학교</option>
-        <option>한남대학교</option><option>한동대학교</option><option>한림대학교</option>
-        <option>한밭대학교</option><option>한서대학교</option><option>한성대학교</option>
-        <option>호서대학교</option><option>홍익대학교</option>
-      </select>
-    </div>
-    <div>
-      <div class="fl">교수님 성함</div>
-      <input id="pi" class="fi" type="text" placeholder="교수님 성함을 입력해주세요." maxlength="10" autocomplete="off"/>
-    </div>
-    <div>
-      <div class="fl">교수님 성별</div>
-      <div class="gender-row">
-        <button class="gb2 on" id="g-male" onclick="setGender('male')"><span style="font-size:19px">👨‍🏫</span> 남자</button>
-        <button class="gb2" id="g-female" onclick="setGender('female')"><span style="font-size:19px">👩‍🏫</span> 여자</button>
+
+  <div class="s0-panel">
+    <div class="s0-panel-bg"></div>
+    <div class="s0-form">
+      <div>
+        <div class="fl">학교</div>
+        <div class="fi-select-wrap">
+          <select id="school-select" class="fi">
+            <option value="" disabled selected>학교를 선택해주세요.</option>
+            <option>가천대학교</option><option>가톨릭대학교</option><option>강남대학교</option>
+            <option>경기대학교</option><option>경남대학교</option><option>경북대학교</option>
+            <option>경상국립대학교</option><option>경성대학교</option><option>경희대학교</option>
+            <option>계명대학교</option><option>고려대학교(서울)</option><option>고려대학교(세종)</option>
+            <option>공주대학교(천안)</option><option>광운대학교</option><option>국립창원대학교</option>
+            <option>국민대학교</option><option>금오공과대학교</option><option>단국대학교</option>
+            <option>대구대학교</option><option>덕성여자대학교</option><option>동국대학교</option>
+            <option>동덕여자대학교</option><option>동아대학교</option><option>명지대학교(인문)</option>
+            <option>명지대학교(자연)</option><option>백석대학교</option><option>삼육대학교</option>
+            <option>상명대학교(서울)</option><option>상명대학교(천안)</option><option>서강대학교</option>
+            <option>서경대학교</option><option>서울과학기술대학교</option><option>서울대학교</option>
+            <option>서울시립대학교</option><option>서울여자대학교</option><option>서울예술대학교</option>
+            <option>서일대학교</option><option>선문대학교</option><option>성결대학교</option>
+            <option>성공회대학교</option><option>성균관대학교</option><option>성신여자대학교</option>
+            <option>숙명여자대학교</option><option>순천대학교</option><option>순천향대학교</option>
+            <option>숭실대학교</option><option>신한대학교</option><option>수원대학교</option>
+            <option>연세대학교</option><option>연세대학교(미래)</option><option>연암공과대학교</option>
+            <option>영남대학교</option><option>우송대학교</option><option>을지대학교</option>
+            <option>이화여자대학교</option><option>인천대학교</option><option>인하공업전문대학</option>
+            <option>인하대학교</option><option>전북대학교</option><option>제주대학교</option>
+            <option>중부대학교</option><option>중앙대학교</option><option>청주대학교</option>
+            <option>충남대학교</option><option>충북대학교</option><option>태재대학교</option>
+            <option>평택대학교</option><option>한국공학대학교</option><option>한국교통대학교</option>
+            <option>한국기술교육대학교</option><option>한국외국어대학교</option><option>한국외국어대학교(글로벌)</option>
+            <option>한국항공대학교</option><option>한남대학교</option><option>한동대학교</option>
+            <option>한림대학교</option><option>한밭대학교</option><option>한서대학교</option>
+            <option>한성대학교</option><option>호서대학교</option><option>홍익대학교</option>
+          </select>
+        </div>
       </div>
+      <div>
+        <div class="fl">교수님 성함</div>
+        <input id="pi" class="fi" type="text" placeholder="교수님 성함을 입력해주세요." maxlength="10" autocomplete="off"/>
+      </div>
+      <div>
+        <div class="fl">교수님 성별</div>
+        <div class="gender-row">
+          <button class="gb2 on" id="g-male" onclick="setGender('male')">남자</button>
+          <button class="gb2" id="g-female" onclick="setGender('female')">여자</button>
+        </div>
+      </div>
+      <button id="start-btn" onclick="startGame()">▷ 개강하기</button>
     </div>
-    <button id="start-btn" onclick="startGame()"><span style="font-size:14px;opacity:.8">▶</span> 게임 시작</button>
   </div>
-  <div class="how-card">
-    <div class="how-title">게임 방법</div>
-    <div class="how-list">
-      <div class="how-item"><span class="how-ico">⌨️</span><span><b>방향키</b> 또는 <b>WASD</b>로 이동</span></div>
-      <div class="how-item"><span class="how-ico">⚡</span><span><b>Shift</b> 홀드로 집중 모드</span></div>
-      <div class="how-item"><span class="how-ico">💚</span><span><span class="hl-g">A/B</span> 학점은 HP 회복</span></div>
-      <div class="how-item"><span class="how-ico">💔</span><span><span class="hl-r">C/D/F</span> 학점은 HP 감소</span></div>
-      <div class="how-item"><span class="how-ico">✨</span><span>탄막을 스쳐 지나가면 그레이즈 보너스를 얻습니다</span></div>
-      <div class="how-item"><span class="how-ico">🛡️</span><span>시험 기간에는 <b>SAFE 존</b> 안에 있으면 F 탄막을 막을 수 있어요!</span></div>
-    </div>
-  </div>
+
+  <div class="s0-credit">@ TOBEPM 2.0</div>
 </div>
 
-<!-- ── GAME -->
+<!-- ── GAME (5_0 그대로) -->
 <div id="game-screen">
   <div id="hud">
     <div class="hud-top">
@@ -247,7 +216,6 @@ select.fi option{background:#1e2140;color:#fff;}
         <div class="hud-phase" id="hud-phase">3월 — 개강의 달</div>
       </div>
       <div class="hud-right">
-        <div class="hud-graze" id="hud-graze">그레이즈 0</div>
         <div class="hud-score-wrap">
           <div class="hud-score" id="sn">0</div>
           <div class="hud-score-lbl">점수</div>
@@ -282,7 +250,7 @@ select.fi option{background:#1e2140;color:#fff;}
   </div>
 </div>
 
-<!-- ── RESULT -->
+<!-- ── RESULT (5_0 그대로) -->
 <div id="s2">
   <div class="res-paper">
     <div class="res-torn-top"></div>
@@ -314,8 +282,8 @@ select.fi option{background:#1e2140;color:#fff;}
   <div class="res-btns">
     <button id="share-btn" onclick="shareResult()">&#x2197;&nbsp;&nbsp;공유하기</button>
     <div class="res-btn-row">
-      <button id="rb2">〈&nbsp;다시 도전하기</button>
-      <button id="hb2">처음으로&nbsp;〉</button>
+      <button id="rb2">〈&nbsp;처음으로</button>
+      <button id="hb2">다시 도전하기&nbsp;〉</button>
     </div>
   </div>
   <div class="rank-section" id="rank-section">
@@ -329,14 +297,14 @@ select.fi option{background:#1e2140;color:#fff;}
   const lionImg = new Image();
   lionImg.src = 'lion.png';
 
-  const bgm = new Audio('bgm.mp3');  // ← 추가
+  const bgm = new Audio('bgm.mp3');
   bgm.loop = true;
   bgm.volume = 0.5;
 
-const maleProfImg = new Image();    // ← 추가
-maleProfImg.src = 'male_professer.png';
-const femaleProfImg = new Image();  // ← 추가
-femaleProfImg.src = 'female_professer.png';
+  const maleProfImg = new Image();
+  maleProfImg.src = 'male_professer.png';
+  const femaleProfImg = new Image();
+  femaleProfImg.src = 'female_professer.png';
 
 const cvEl=document.getElementById('cv');
 const ctx=cvEl.getContext('2d');
@@ -348,8 +316,6 @@ function resizeCanvas(){
   cvEl.width=CW;cvEl.height=CH;
 }
 
-// ═══ 3.2 게임 로직 (피버 시스템 제거) ═══
-
 const PH=[
   {month:'3월', name:'개강의 달',            quote:'"새 학기야. 어디 한번 해봐!"',                         bg:'transparent',acc:'#3182F6',fiv:1500,miv:700, wt:[9,13,22,20,11],arms:2,startT:0 },
   {month:'4월', name:'벚꽃 그리고 중간고사', quote:'"중간고사다. 이제부터 진심이야."',                     bg:'transparent',acc:'#FF6BA8',fiv:1100,miv:500, wt:[6,10,24,22,14],arms:3,startT:12},
@@ -360,27 +326,25 @@ const PH=[
 ];
 
 const LC={
-  A:{c:'#00C471',bg:'rgba(0,90,40,.88)',   tc:'#fff',sp:3.5,r:13,hr:9},
-  B:{c:'#3182F6',bg:'rgba(8,40,130,.88)',  tc:'#fff',sp:3.5,r:13,hr:9},
-  C:{c:'#FFE033',bg:'rgba(120,100,0,.88)', tc:'#fff',sp:3.5,r:13,hr:9},
-  D:{c:'#E06000',bg:'rgba(95,25,0,.88)',   tc:'#fff',sp:3.5,r:13,hr:9},
-  F:{c:'#FF5C6A',bg:'rgba(55,4,4,.92)',    tc:'#fff',sp:3.5,r:13,hr:9}
+  A:{c:'#00C471',bg:'rgba(0,90,40,.88)',   tc:'#fff',sp:4.5,r:13,hr:9},
+  B:{c:'#3182F6',bg:'rgba(8,40,130,.88)',  tc:'#fff',sp:4.5,r:13,hr:9},
+  C:{c:'#FFE033',bg:'rgba(120,100,0,.88)', tc:'#fff',sp:4.5,r:13,hr:9},
+  D:{c:'#E06000',bg:'rgba(95,25,0,.88)',   tc:'#fff',sp:4.5,r:13,hr:9},
+  F:{c:'#FF5C6A',bg:'rgba(55,4,4,.92)',    tc:'#fff',sp:4.5,r:13,hr:9}
 };
 const FX={A:15,B:5,C:-10,D:-20,F:-999};
 const SFX={A:150,B:80,C:8,D:8,F:8};
 const WS=[25,25,4,2,0];
 
 let prof='',gender='male';
-let hp=100,score=0,graze=0,gTime=0;
+let hp=100,score=0,gTime=0;
 let running=false,raf=0,lastT=0,diff=0;
 let bullets=[],efx=[],decorPtcs=[],stars=[];
 let pTimer=0,patPhase=0,spA=0,spT=0,fireTurn='pattern';
 let keys={},touch={x:null,y:null};
 let Px=400,Py=460;
 let curPh=0,ann={on:false,a:0,t:0,ph:0},endAnn={on:false,a:0,t:0},gameEnding=false;
-const HR=5,GZR=20,SPD=3.2,FSP=1.5;
-
-// 세이프존
+const HR=5,SPD=4.2,FSP=1.5;
 let safeZones=[],safeZoneTimer=0;
 const SAFE_ZONE_INTERVAL=2000;
 const GAME_END_TIME=57;
@@ -394,7 +358,6 @@ window.setGender=setGender;
 
 function wPick(w){const t=w.reduce((a,b)=>a+b,0);let r=Math.random()*t;for(let i=0;i<5;i++){r-=w[i];if(r<=0)return'ABCDF'[i];}return'F';}
 function rrct(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
-
 function initStars(){stars=[];for(let i=0;i<85;i++)stars.push({x:Math.random()*CW,y:Math.random()*CH,r:.4+Math.random()*1.2,s:.05+Math.random()*.25,o:.15+Math.random()*.5});}
 
 function initDecor(p){
@@ -425,17 +388,11 @@ function drawDecor(){
   ctx.globalAlpha=1;
 }
 
-function bossX(){
-  if(gameEnding)return CW/2;
-  return CW/2+Math.sin(diff*.0008)*Math.min(140,CW*.32);
-}
-function bossY(){
-  if(gameEnding)return 90;
-  return 90+Math.sin(diff*.0006)*18;
-}
+function bossX(){if(gameEnding)return CW/2;return CW/2+Math.sin(diff*.0008)*Math.min(140,CW*.32);}
+function bossY(){if(gameEnding)return 90;return 90+Math.sin(diff*.0006)*18;}
 
 function spawn(x,y,ang,letter,sm){
-  const c=LC[letter],sp=(letter==='F'?3.5:c.sp)*(sm||1);
+  const c=LC[letter],sp=(letter==='F'?4.5:c.sp)*(sm||1);
   bullets.push({x,y,alpha:1,fading:false,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,letter,c:c.c,bg:c.bg,tc:c.tc,r:c.r,hr:c.hr,gz:false});
 }
 
@@ -524,9 +481,7 @@ function checkPhase(){
   if(next!==curPh){
     const prevWasExam=PH[curPh].exam;
     curPh=next;
-    if(prevWasExam){
-      bullets.forEach(b=>{if(b.letter==='F')b.fading=true;});
-    }
+    if(prevWasExam){bullets.forEach(b=>{if(b.letter==='F')b.fading=true;});}
     initDecor(curPh);
     ann={on:true,a:0,t:0,ph:curPh};pTimer=0;spT=0;
     showAnnDOM(curPh);
@@ -576,7 +531,6 @@ function triggerEnding(){
   const overlay=document.getElementById('end-overlay');
   overlay.style.display='flex';overlay.style.opacity=0;
   document.getElementById('end-card').style.borderColor='#FFD06044';
-  document.getElementById('end-overlay').classList.add('show');
 }
 
 function updateEndAnn(dt){
@@ -591,7 +545,6 @@ function updateEndAnn(dt){
 
 function updateHUD(){
   document.getElementById('sn').textContent=score.toLocaleString();
-  document.getElementById('hud-graze').textContent='그레이즈 '+graze;
   document.getElementById('hp-side-fill').style.height=Math.max(0,hp)+'%';
   document.getElementById('hp-side-fill').style.background=hp>60?'#00C471':hp>30?'#E8C000':'#D02030';
   document.getElementById('hp-side-num').textContent=Math.max(0,Math.round(hp));
@@ -605,10 +558,10 @@ function draw(){
   const BX=bossX(),BY=bossY();
   ctx.fillStyle=p.acc+'0a';ctx.beginPath();ctx.arc(BX,BY,52,0,Math.PI*2);ctx.fill();
   if(curPh>=2){const pulse=.07+.05*Math.sin(Date.now()*.007);ctx.strokeStyle=p.acc+Math.floor(pulse*600).toString(16).padStart(2,'0');ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(BX,BY,44,0,Math.PI*2);ctx.stroke();}
-  const profImg = gender === 'female' ? femaleProfImg : maleProfImg;
-  const ps = 54;
-  ctx.drawImage(profImg, BX - ps/2, BY - ps/2, ps, ps);
-  ctx.font='700 9px "Noto Sans KR",sans-serif';ctx.fillStyle='rgba(255,255,255,.55)';ctx.textBaseline='alphabetic';
+  const profImg=gender==='female'?femaleProfImg:maleProfImg;
+  const ps=54;
+  ctx.drawImage(profImg,BX-ps/2,BY-ps/2,ps,ps);
+  ctx.font='700 11px "Noto Sans KR",sans-serif';ctx.fillStyle='#000000';ctx.textBaseline='alphabetic';
   ctx.fillText((prof||'담당')+'교수',BX,BY+38);
 
   bullets.forEach(b=>{
@@ -621,12 +574,11 @@ function draw(){
     ctx.globalAlpha=1;
   });
 
-  const size = 40;
-  ctx.drawImage(lionImg, Px - size/2, Py - size/2, size, size);
+  const size=40;
+  ctx.drawImage(lionImg,Px-size/2,Py-size/2,size,size);
   ctx.strokeStyle='rgba(255,255,255,.5)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(Px,Py,HR+2.5,0,Math.PI*2);ctx.stroke();
   ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(Px,Py,HR,0,Math.PI*2);ctx.fill();
   if(keys['Shift']||keys['shift']){ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=1;ctx.setLineDash([3,4]);ctx.beginPath();ctx.arc(Px,Py,GZR,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);}
-  ctx.font='700 9px "Noto Sans KR",sans-serif';ctx.fillStyle='rgba(255,255,255,.45)';ctx.textAlign='center';ctx.textBaseline='alphabetic';
 
   efx.forEach(e=>{ctx.globalAlpha=e.l;ctx.font='800 '+e.s+'px "Noto Sans KR",sans-serif';ctx.fillStyle=e.c;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(e.t,e.x,e.y);});
   ctx.globalAlpha=1;
@@ -681,7 +633,6 @@ function loop(ts){
       if(b.letter==='F'||hp<=0){hp=0;running=false;setTimeout(showResult,400);return false;}
       return false;
     }
-    if(!b.gz&&d<b.hr+GZR){b.gz=true;graze++;score+=8;efx.push({x:b.x,y:b.y,vx:0,vy:-1.5,l:.7,c:'#FFD060',t:'GRAZE',s:9});}
     return true;
   });
   efx=efx.filter(e=>{e.x+=e.vx;e.y+=e.vy;e.vy+=.05;e.l-=.045;return e.l>0;});
@@ -690,9 +641,8 @@ function loop(ts){
   raf=requestAnimationFrame(loop);
 }
 
-// 결과
 function showResult(){
-  bgm.pause();  // ← 추가
+  bgm.pause();
   document.getElementById('game-screen').style.display='none';
   let g,m;
   if(score>=4000){g='A+';m='"감탄했다. 네가 최고야."';}
@@ -729,18 +679,17 @@ window.shareResult=function(){
 };
 
 function startGame(){
-  bgm.currentTime = 0;  // ← 추가 (다시 도전할 때 처음부터)
-  bgm.play();           // ← 추가
+  bgm.currentTime=0;
+  bgm.play();
   const schoolEl=document.getElementById('school-select');
-  if(!schoolEl.value){alert('소속 대학교를 선택해주세요!');return;}
+  if(!schoolEl.value){alert('학교를 선택해주세요!');return;}
   window._selectedSchool=schoolEl.value;
   prof=document.getElementById('pi').value.trim()||'담당';
-  hp=100;score=0;graze=0;gTime=0;diff=0;
+  hp=100;score=0;gTime=0;diff=0;
   bullets=[];efx=[];keys={};touch={x:null,y:null};
   safeZones=[];safeZoneTimer=0;
   lastT=0;pTimer=0;patPhase=0;spA=0;spT=0;
   curPh=0;ann={on:true,a:0,t:0,ph:0};endAnn={on:false,a:0,t:0};gameEnding=false;fireTurn='pattern';
-  // exam-mode 초기화
   document.getElementById('canvas-wrap').classList.remove('exam-mode');
   document.getElementById('ann-card').classList.remove('hell');
   showAnnDOM(0);
@@ -761,6 +710,7 @@ function startGame(){
 
 function goHome(){
   running=false;cancelAnimationFrame(raf);
+  bgm.pause();
   document.getElementById('canvas-wrap').classList.remove('exam-mode');
   document.getElementById('game-screen').style.display='none';
   document.getElementById('s2').style.display='none';
@@ -768,8 +718,8 @@ function goHome(){
 }
 
 window.startGame=startGame;
-document.getElementById('rb2').addEventListener('click',startGame);
-document.getElementById('hb2').addEventListener('click',goHome);
+document.getElementById('rb2').addEventListener('click',goHome);
+document.getElementById('hb2').addEventListener('click',startGame);
 document.getElementById('pi').addEventListener('keydown',function(e){if(e.key==='Enter')startGame();});
 document.addEventListener('keydown',function(e){keys[e.key]=true;if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))e.preventDefault();});
 document.addEventListener('keyup',function(e){keys[e.key]=false;});
