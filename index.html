@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>교수님이 던지는 학점 피하기</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap');
+@font-face {
+  font-family: 'DungGeunMo';
+  font-style: normal;
+  font-weight: 400;
+  src: url('neodgm.woff2') format('woff2'),
+       url('neodgm.woff') format('woff');
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-family:'DungGeunMo','Noto Sans KR',sans-serif !important;}
+:root{--bg:#1e2140;--blue:#6c7bff;--green:#4ade80;--red:#f87171;--sub:rgba(255,255,255,.5);}
+body{background:var(--bg);display:flex;justify-content:center;align-items:flex-start;min-height:100vh;font-family:'DungGeunMo',-apple-system,sans-serif;overflow-x:hidden;}
+#wrap{width:100%;max-width:600px;min-height:100vh;display:flex;flex-direction:column;}
+
+/* ── START (connect 디자인) */
+#s0{display:flex;flex-direction:column;align-items:center;min-height:100vh;width:100%;position:relative;overflow-x:hidden;background:transparent;}
+
+#s0-bg{position:absolute;inset:0;background-image:url('background.png');background-size:cover;background-position:center top;background-repeat:no-repeat;z-index:0;}
+#s0-bg::after{content:none;}
+.s0-photo-layer{display:none;}
+
+.s0-title-wrap{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  margin-top:160px;
+  background: rgba(255, 255, 255, 0.047);
+  backdrop-filter: blur(12px);
+  border-radius: 30px;
+  padding: 16px 24px;
+}
+.s0-tagline{font-family:'DungGeunMo',sans-serif;font-size:22px;color:#1a1a1a;line-height:1.2;text-shadow:1px 1px 0 rgba(255,255,255,.6);}
+.s0-title{font-family:'DungGeunMo',sans-serif;font-size:44px;line-height:1.1;letter-spacing:-1px;text-shadow:-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff,2px 2px 0 #fff,4px 4px 10px rgba(0,0,0,.2);}
+.s0-title .word-grade{color:#ed1818;font-size:48px;}
+.s0-title .word-avoid{color:#1a1a1a;}
+
+.s0-panel{position:relative;z-index:2;width:calc(100% - 32px);max-width:339px;margin-top:20px;border-radius:16px;overflow:hidden;background:url('background.png') center/cover no-repeat !important;border:4px solid #8B5E3C;box-shadow:0 0 0 2px #5a3820,inset 0 0 0 2px rgba(255,200,120,.15),0 8px 32px rgba(0,0,0,.45);}
+.s0-panel::before{content:'';position:absolute;inset:0;z-index:0;background-color:rgba(160,80,30,.82);background-image:repeating-linear-gradient(0deg,transparent,transparent 22px,rgba(0,0,0,.18) 22px,rgba(0,0,0,.18) 25px),repeating-linear-gradient(90deg,transparent,transparent 44px,rgba(0,0,0,.12) 44px,rgba(0,0,0,.12) 47px);pointer-events:none;}
+.s0-panel::after{content:'';position:absolute;inset:0;z-index:0;background-image:repeating-linear-gradient(90deg,transparent,transparent 44px,rgba(0,0,0,.12) 44px,rgba(0,0,0,.12) 47px);background-size:47px 50px;background-position:23px 25px;pointer-events:none;}
+.s0-panel-bg{display:none;}
+
+.s0-form{position:relative;z-index:2;display:flex;flex-direction:column;gap:24px;padding:30px 16px;}
+.fl{font-family:'DungGeunMo',sans-serif;font-size:16px;color:#fff;margin-bottom:8px;line-height:20px;}
+.fi{width:100%;background:#fff;border:none;border-radius:14px;padding:12px 16px;font-family:'DungGeunMo',sans-serif;font-size:16px;color:#434343;outline:none;height:48px;-webkit-appearance:none;appearance:none;}
+.fi::placeholder{color:#999;}
+.fi-select-wrap{position:relative;}
+.fi-select-wrap::after{content:'▼';position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:11px;color:#888;pointer-events:none;}
+.gender-row{display:flex;gap:12px;}
+.gb2{flex:1;display:flex;align-items:center;justify-content:center;height:48px;border-radius:14px;border:none;background:#fff;color:#434343;font-family:'DungGeunMo',sans-serif;font-size:16px;cursor:pointer;transition:all .18s;}
+.gb2.on{background:#e8eaff;color:#4053a5;box-shadow:0 3px 12px rgba(64,83,165,.25);}
+#start-btn{display:flex;align-items:center;justify-content:center;gap:11px;width:100%;height:48px;background:#fff;border:none;border-radius:14px;color:#4053a5;font-family:'DungGeunMo',sans-serif;font-size:18px;cursor:pointer;transition:all .2s;}
+#start-btn:hover{background:#4053a5;color:#fff;}
+.s0-credit{position:relative;z-index:2;font-size:12px;color:rgba(255,255,255,.85);margin-top:16px;}
+
+/* ── GAME */
+#game-screen{display:none;flex-direction:column;width:100%;height:100vh;overflow:hidden;}
+#hud{background:#1a1d38;border-bottom:1px solid rgba(255,255,255,.07);padding:10px 18px;display:flex;flex-direction:column;gap:7px;flex-shrink:0;}
+.hud-top{display:flex;align-items:center;gap:11px;}
+.hud-av{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:2px solid rgba(255,255,255,.1);}
+.hud-info{display:flex;flex-direction:column;}
+.hud-name{font-size:14px;font-weight:800;color:#fff;line-height:1.2;}
+.hud-phase{font-size:10.5px;color:var(--sub);}
+.hud-right{margin-left:auto;display:flex;align-items:center;gap:14px;}
+.hud-score-wrap{display:flex;flex-direction:column;align-items:flex-end;}
+.hud-score{font-size:17px;font-weight:900;color:#fff;line-height:1;}
+.hud-score-lbl{font-size:8.5px;color:var(--sub);}
+#hp-side{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:240px;background:rgba(0,0,0,.35);border-radius:100px;z-index:5;box-shadow:0 2px 12px rgba(0,0,0,.5);display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;}
+#hp-side-fill{width:100%;height:100%;background:#00C471;border-radius:100px;transition:height .3s,background .3s;}
+#hp-side-num{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:800;color:#fff;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.8);}
+#hp-side-lbl{position:absolute;bottom:-36px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:700;color:rgba(255,255,255,.6);text-shadow:0 1px 3px rgba(0,0,0,.8);}
+
+/* CANVAS */
+#canvas-wrap{flex:1;position:relative;overflow:hidden;}
+#canvas-wrap::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#87CEEB 0%,#b8e4f9 32%,#d4eef9 52%,#e2f5e0 68%,#c4dba8 83%,#9eb87a 100%);z-index:0;}
+#canvas-wrap::after{content:'';position:absolute;bottom:0;left:0;right:0;height:52%;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 300' preserveAspectRatio='xMidYMax slice'%3E%3Crect x='0' y='55' width='115' height='245' fill='%23afc49a' rx='2'/%3E%3Crect x='12' y='74' width='17' height='20' fill='%23cce0ba' rx='1'/%3E%3Crect x='12' y='108' width='17' height='20' fill='%23cce0ba' rx='1'/%3E%3Crect x='40' y='74' width='17' height='20' fill='%23cce0ba' rx='1'/%3E%3Crect x='40' y='108' width='17' height='20' fill='%23cce0ba' rx='1'/%3E%3Crect x='68' y='74' width='17' height='20' fill='%23cce0ba' rx='1'/%3E%3Crect x='68' y='108' width='17' height='20' fill='%23cce0ba' rx='1'/%3E%3Crect x='125' y='18' width='205' height='282' fill='%23b6c9a8' rx='3'/%3E%3Crect x='142' y='35' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='177' y='35' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='212' y='35' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='247' y='35' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='282' y='35' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='142' y='76' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='177' y='76' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='212' y='76' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='247' y='76' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='282' y='76' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='142' y='117' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='177' y='117' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='212' y='117' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='247' y='117' width='23' height='26' fill='%23cce0c0' rx='1'/%3E%3Crect x='340' y='75' width='165' height='225' fill='%23a8be98' rx='2'/%3E%3Crect x='356' y='93' width='20' height='23' fill='%23c4d8b4' rx='1'/%3E%3Crect x='386' y='93' width='20' height='23' fill='%23c4d8b4' rx='1'/%3E%3Crect x='416' y='93' width='20' height='23' fill='%23c4d8b4' rx='1'/%3E%3Crect x='446' y='93' width='20' height='23' fill='%23c4d8b4' rx='1'/%3E%3Crect x='356' y='130' width='20' height='23' fill='%23c4d8b4' rx='1'/%3E%3Crect x='386' y='130' width='20' height='23' fill='%23c4d8b4' rx='1'/%3E%3Crect x='416' y='130' width='20' height='23' fill='%23c4d8b4' rx='1'/%3E%3Crect x='446' y='130' width='20' height='23' fill='%23c4d8b4' rx='1'/%3E%3Crect x='515' y='35' width='175' height='265' fill='%23b8cca6' rx='3'/%3E%3Crect x='530' y='53' width='21' height='25' fill='%23cce0be' rx='1'/%3E%3Crect x='561' y='53' width='21' height='25' fill='%23cce0be' rx='1'/%3E%3Crect x='592' y='53' width='21' height='25' fill='%23cce0be' rx='1'/%3E%3Crect x='623' y='53' width='21' height='25' fill='%23cce0be' rx='1'/%3E%3Crect x='654' y='53' width='21' height='25' fill='%23cce0be' rx='1'/%3E%3Crect x='530' y='92' width='21' height='25' fill='%23cce0be' rx='1'/%3E%3Crect x='561' y='92' width='21' height='25' fill='%23cce0be' rx='1'/%3E%3Crect x='592' y='92' width='21' height='25' fill='%23cce0be' rx='1'/%3E%3Crect x='623' y='92' width='21' height='25' fill='%23cce0be' rx='1'/%3E%3Crect x='700' y='65' width='145' height='235' fill='%23afc09e' rx='2'/%3E%3Crect x='714' y='82' width='18' height='21' fill='%23c6dab6' rx='1'/%3E%3Crect x='742' y='82' width='18' height='21' fill='%23c6dab6' rx='1'/%3E%3Crect x='770' y='82' width='18' height='21' fill='%23c6dab6' rx='1'/%3E%3Crect x='798' y='82' width='18' height='21' fill='%23c6dab6' rx='1'/%3E%3Crect x='714' y='118' width='18' height='21' fill='%23c6dab6' rx='1'/%3E%3Crect x='742' y='118' width='18' height='21' fill='%23c6dab6' rx='1'/%3E%3Crect x='770' y='118' width='18' height='21' fill='%23c6dab6' rx='1'/%3E%3C/svg%3E") center bottom / cover no-repeat;z-index:0;opacity:.82;}
+#cv{position:absolute;inset:0;display:block;width:100%;height:100%;z-index:2;}
+
+/* ── 시험 페이즈 지옥 배경 */
+#hell-overlay{position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(ellipse at center,rgba(60,0,0,0) 30%,rgba(120,0,0,.45) 100%);transition:background 1.5s ease,opacity 1.5s ease;opacity:0;}
+#canvas-wrap.exam-mode::before{background:linear-gradient(180deg,#0d0008 0%,#1a0010 25%,#2a0015 50%,#1a0008 75%,#0d0005 100%) !important;}
+#canvas-wrap.exam-mode #hell-overlay{opacity:1;}
+.ann-card.hell{background:rgba(30,0,0,.95);border-color:#ff2200 !important;box-shadow:0 0 40px rgba(255,30,0,.35),inset 0 0 30px rgba(80,0,0,.5);}
+.ann-card.hell .ann-name{color:#ff4444;text-shadow:0 0 12px rgba(255,0,0,.8);}
+.ann-card.hell .ann-month{color:#ff6060 !important;}
+.ann-card.hell .ann-quote{color:rgba(255,180,180,.6);}
+
+/* ── RESULT */
+@keyframes popIn{0%{transform:scale(.88) rotate(0deg);opacity:0}100%{transform:scale(1) rotate(0deg);opacity:1}}
+@keyframes stampIn{0%{transform:rotate(-12deg) scale(0);opacity:0}70%{transform:rotate(-12deg) scale(1.15)}100%{transform:rotate(-12deg) scale(1);opacity:1}}
+#s2{display:none;flex-direction:column;align-items:center;min-height:100vh;padding:100px 20px 48px;gap:18px;background:#2d4a3a;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:26px 26px;}
+.res-paper{width:100%;max-width:360px;position:relative;transform:rotate(0deg);animation:popIn .55s cubic-bezier(.34,1.56,.64,1) both;}
+.res-torn-top,.res-paper-body,.res-torn-bottom{position:relative;z-index:1;}
+.res-torn-top{width:100%;height:14px;background:url('paper.png') center top/cover no-repeat;border-radius:6px 6px 0 0;}
+.res-torn-bottom{width:100%;height:14px;background:url('paper.png') center bottom/cover no-repeat;border-radius:0 0 6px 6px;}
+.res-paper-body{background:url('paper.png') center/cover no-repeat;padding:24px 20px 24px 60px;position:relative;}
+.res-school-name{font-size:12px;font-weight:700;color:#666;text-align:left;margin-bottom:10px;letter-spacing:.5px;}
+.res-paper-title{font-size:28px;font-weight:900;color:#1a1a1a;text-align:left;margin-bottom:6px;letter-spacing:-1px;}
+.res-paper-prof{font-size:13px;color:#555;text-align:left;margin-bottom:14px;padding-bottom:12px;border-bottom:1.5px solid #c8b888;}
+.res-paper-rows{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
+.res-paper-row{display:flex;align-items:baseline;font-size:14px;font-weight:700;color:#1a1a1a;letter-spacing:.2px;}
+.res-paper-row .r-lbl{width:70px;flex-shrink:0;}
+.res-paper-row .r-sep{margin:0 4px;color:#555;font-weight:400;}
+.res-paper-row .r-val{font-weight:900;color:#1a1a1a;}
+.res-paper-row .r-val.red{color:#c8302a;}
+.res-paper-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;}
+.res-paper-quote{font-size:11px;font-weight:700;color:#c8302a;line-height:1.7;max-width:100%;white-space:nowrap;}
+.res-stamp{width:76px;height:76px;flex-shrink:0;border-radius:50%;border:3.5px dashed #c8302a;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:900;color:#c8302a;transform:rotate(-12deg);opacity:.82;animation:stampIn .6s cubic-bezier(.34,1.56,.64,1) .35s both;position:relative;box-shadow:inset 0 0 0 1px rgba(200,48,42,.2);}
+.res-stamp::after{content:'';position:absolute;inset:-5px;border-radius:50%;border:1px dashed rgba(200,48,42,.3);}
+.res-btns{width:100%;max-width:360px;display:flex;flex-direction:column;gap:18px;}
+#share-btn{font-family:inherit;font-size:15px;font-weight:700;width:100%;padding:12px 16px;background:#fff;color:#333;border:none;border-radius:14px;cursor:pointer;transition:transform .1s;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 10px rgba(0,0,0,.18);}
+#share-btn:active{transform:scale(.98);}
+.res-btn-row{display:flex;gap:10px;}
+#rb2{font-family:inherit;font-size:13.5px;font-weight:700;flex:1;padding:11px 14px;background:rgba(255,255,255,.13);color:#fff;border:1.5px solid rgba(255,255,255,.28);border-radius:14px;cursor:pointer;transition:transform .1s;display:flex;align-items:center;justify-content:center;gap:5px;}
+#rb2:active{transform:scale(.98);}
+#hb2{font-family:inherit;font-size:13.5px;font-weight:700;flex:1;padding:11px 14px;background:rgba(255,255,255,.13);color:#fff;border:1.5px solid rgba(255,255,255,.28);border-radius:14px;cursor:pointer;transition:transform .1s;display:flex;align-items:center;justify-content:center;gap:5px;}
+#hb2:active{transform:scale(.98);}
+.rank-section{width:100%;max-width:360px;margin-top:20px;}
+.rank-title{font-size:12px;font-weight:800;color:rgba(255,255,255,.45);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.rank-me{color:#8bc4a8;font-size:11px;}
+.rank-item{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-radius:10px;margin-bottom:5px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:12.5px;}
+.rank-item.me{background:rgba(139,196,168,.18);border-color:rgba(139,196,168,.4);}
+.rank-medal{width:36px;flex-shrink:0;text-align:center;font-size:13px;color:rgba(255,255,255,.7);}
+.rank-score{font-weight:500;color:rgba(255,255,255,.6);}
+.rank-item.me .rank-score{font-weight:900;color:#fff;}
+.rank-loading{font-size:12px;color:rgba(255,255,255,.3);text-align:center;padding:16px;}
+
+#ann-overlay{position:absolute;inset:0;z-index:10;display:none;align-items:center;justify-content:center;pointer-events:none;}
+#end-overlay{position:absolute;inset:0;z-index:10;display:none;align-items:center;justify-content:center;pointer-events:none;}
+.ann-card{background:rgba(10,12,35,.88);border-radius:20px;padding:28px 36px;text-align:center;border:1px solid rgba(255,255,255,.1);min-width:280px;backdrop-filter:blur(8px);}
+.ann-month{font-size:12px;font-weight:700;letter-spacing:1px;margin-bottom:6px;}
+.ann-name{font-size:20px;font-weight:900;color:#fff;margin-bottom:12px;}
+.ann-divider{height:1px;background:rgba(255,255,255,.1);margin-bottom:12px;}
+.ann-quote{font-size:12px;color:rgba(255,255,255,.5);}
+.ann-dots{display:flex;gap:6px;justify-content:center;margin-top:16px;}
+.ann-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);}
+.ann-dot.active{width:18px;border-radius:3px;}
+
+#tutorial-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,.4);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 9999;
+}
+#tutorialBox {
+  width: 420px; max-width: calc(100vw - 32px); padding: 25px; border-radius: 20px;
+  background: rgba(63,82,121,.6); backdrop-filter: blur(20px); color: #fff;
+}
+#tutorialBox #title { font-size: 22px; font-weight: 700; margin-bottom: 15px; text-align: center; }
+#tutorialBox ul { padding: 0; list-style: none; line-height: 1.8; }
+#tutorialBox li { margin-bottom: 8px; }
+#tutorialBox .good  { color: #4dff88; }
+#tutorialBox .bad   { color: #ff6b6b; }
+#tutorialBox .danger{ color: #fc1d1d; }
+#tutorialBox .safe  { color: #76ece4; }
+#tutorialBox .bgm   { color: #faa3d2; }
+#tutorialBox button { width: 100%; margin-top: 20px; padding: 10px; border: 0; border-radius: 10px; background: #e088b055; color: #fff; font-size: 16px; cursor: pointer; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body>
+<div id="tutorial-overlay" style="display:none">
+  <div id="tutorialBox">
+    <div id="title">✨ 게임 작동 방식 ✨</div>
+    <ul>
+      <li>⌨️ 웹은 방향키 또는 WASD로 이동</li>
+      <li>📱 모바일은 터치 이동</li>
+      <li><span class="good">💚 A / B 학점</span> → HP 회복</li>
+      <li><span class="bad">💔 C / D 학점</span> → HP 감소</li>
+      <li><span class="danger">💀 F 학점</span> → 즉사</li>
+      <li>🛡️ 시험기간에는 <span class="safe">세이프존</span>에서 F 피하기!</li>
+      <li>🎧 볼륨을 높여 신나는 <span class="bgm">BGM</span>과 함께 하기!</li>
+    </ul>
+    <button onclick="document.getElementById('tutorial-overlay').style.display='none'; actuallyStartGame();">
+      시작하기
+    </button>
+  </div>
+</div>
+<div id="wrap">
+
+<!-- ── START (connect 디자인) -->
+<div id="s0">
+  <div id="s0-bg"></div>
+  <div class="s0-photo-layer"></div>
+
+  <div class="s0-title-wrap">
+    <div class="s0-tagline">교수님이 던지는</div>
+    <div class="s0-title">
+      <span class="word-grade">학점</span><span class="word-avoid"> 피하기</span>
+    </div>
+  </div>
+
+  <div class="s0-panel">
+    <div class="s0-panel-bg"></div>
+    <div class="s0-form">
+      <div>
+        <div class="fl">학교</div>
+        <div class="fi-select-wrap">
+          <select id="school-select" class="fi">
+            <option value="" disabled selected>학교를 선택해주세요.</option>
+            <option>가천대학교</option><option>가톨릭대학교</option><option>강남대학교</option>
+            <option>경기대학교</option><option>경남대학교</option><option>경북대학교</option>
+            <option>경상국립대학교</option><option>경성대학교</option><option>경희대학교</option>
+            <option>계명대학교</option><option>고려대학교(서울)</option><option>고려대학교(세종)</option>
+            <option>공주대학교(천안)</option><option>광운대학교</option><option>국립창원대학교</option>
+            <option>국민대학교</option><option>금오공과대학교</option><option>단국대학교</option>
+            <option>대구대학교</option><option>덕성여자대학교</option><option>동국대학교</option>
+            <option>동덕여자대학교</option><option>동아대학교</option><option>명지대학교(인문)</option>
+            <option>명지대학교(자연)</option><option>백석대학교</option><option>삼육대학교</option>
+            <option>상명대학교(서울)</option><option>상명대학교(천안)</option><option>서강대학교</option>
+            <option>서경대학교</option><option>서울과학기술대학교</option><option>서울대학교</option>
+            <option>서울시립대학교</option><option>서울여자대학교</option><option>서울예술대학교</option>
+            <option>서일대학교</option><option>선문대학교</option><option>성결대학교</option>
+            <option>성공회대학교</option><option>성균관대학교</option><option>성신여자대학교</option>
+            <option>숙명여자대학교</option><option>순천대학교</option><option>순천향대학교</option>
+            <option>숭실대학교</option><option>신한대학교</option><option>수원대학교</option>
+            <option>연세대학교</option><option>연세대학교(미래)</option><option>연암공과대학교</option>
+            <option>영남대학교</option><option>우송대학교</option><option>을지대학교</option>
+            <option>이화여자대학교</option><option>인천대학교</option><option>인하공업전문대학</option>
+            <option>인하대학교</option><option>전북대학교</option><option>제주대학교</option>
+            <option>중부대학교</option><option>중앙대학교</option><option>청주대학교</option>
+            <option>충남대학교</option><option>충북대학교</option><option>태재대학교</option>
+            <option>평택대학교</option><option>한국공학대학교</option><option>한국교통대학교</option>
+            <option>한국기술교육대학교</option><option>한국외국어대학교</option><option>한국외국어대학교(글로벌)</option>
+            <option>한국항공대학교</option><option>한남대학교</option><option>한동대학교</option>
+            <option>한림대학교</option><option>한밭대학교</option><option>한서대학교</option>
+            <option>한성대학교</option><option>호서대학교</option><option>홍익대학교</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <div class="fl">교수님 성함</div>
+        <input id="pi" class="fi" type="text" placeholder="교수님 성함을 입력해주세요." maxlength="10" autocomplete="off"/>
+      </div>
+      <div>
+        <div class="fl">교수님 성별</div>
+        <div class="gender-row">
+          <button class="gb2 on" id="g-male" onclick="setGender('male')">남자</button>
+          <button class="gb2" id="g-female" onclick="setGender('female')">여자</button>
+        </div>
+      </div>
+      <button id="start-btn" onclick="startGame()">▷ 개강하기</button>
+    </div>
+  </div>
+
+  <div class="s0-credit">@ TOBEPM 2.0</div>
+</div>
+
+<!-- ── GAME (5_0 그대로) -->
+<div id="game-screen">
+  <div id="hud">
+    <div class="hud-top">
+      <div class="hud-av" id="hud-av">👨‍🏫</div>
+      <div class="hud-info">
+        <div class="hud-name" id="hud-name">교수님</div>
+        <div class="hud-phase" id="hud-phase">3월 — 개강의 달</div>
+      </div>
+      <div class="hud-right">
+        <div class="hud-score-wrap">
+          <div class="hud-score" id="sn">0</div>
+          <div class="hud-score-lbl">점수</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="canvas-wrap">
+    <div id="hell-overlay"></div>
+    <canvas id="cv"></canvas>
+    <div id="hp-side">
+      <div id="hp-side-fill"></div>
+      <div id="hp-side-num">100</div>
+      <div id="hp-side-lbl">HP</div>
+    </div>
+    <div id="ann-overlay">
+      <div class="ann-card" id="ann-card">
+        <div class="ann-month" id="ann-month">3월</div>
+        <div class="ann-name" id="ann-name">개강의 달</div>
+        <div class="ann-divider"></div>
+        <div class="ann-quote" id="ann-quote"></div>
+        <div class="ann-dots" id="ann-dots"></div>
+      </div>
+    </div>
+    <div id="end-overlay">
+      <div class="ann-card" id="end-card">
+        <div class="ann-name" style="font-size:24px">🎓 종강이다!</div>
+        <div class="ann-divider"></div>
+        <div class="ann-quote">"한 학기, 수고했어. 이제 결과를 보자."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── RESULT (5_0 그대로) -->
+<div id="s2">
+  <div class="res-paper">
+    <div class="res-paper-body">
+      <div class="res-school-name" id="res-school">○○대학교</div>
+      <div class="res-paper-title">1학기 성적표</div>
+      <div class="res-paper-prof" id="rby">교수 : —</div>
+      <div class="res-paper-rows">
+        <div class="res-paper-row">
+          <span class="r-lbl">학기 석차</span><span class="r-sep">:</span>
+          <span class="r-val red" id="res-rank">집계 중...</span>
+        </div>
+        <div class="res-paper-row">
+          <span class="r-lbl">생존 시간</span><span class="r-sep">:</span>
+          <span class="r-val" id="rv1">0초</span>
+        </div>
+        <div class="res-paper-row">
+          <span class="r-lbl">최종 점수</span><span class="r-sep">:</span>
+          <span class="r-val" id="rv0">0</span>
+        </div>
+      </div>
+      <div class="res-paper-bottom">
+        <div class="res-paper-quote" id="rqt"></div>
+        <div class="res-stamp" id="rbg">?</div>
+      </div>
+    </div>
+  </div>
+  <div class="res-btns">
+    <button id="share-btn" onclick="shareResult()">&#x2197;&nbsp;&nbsp;성적표 저장하기</button>
+    <div class="res-btn-row">
+      <button id="rb2">〈&nbsp;처음으로</button>
+      <button id="hb2">다시 도전하기&nbsp;〉</button>
+    </div>
+  </div>
+  <div class="rank-section" id="rank-section">
+    <div class="rank-loading">🔄 랭킹 불러오는 중...</div>
+  </div>
+</div>
+
+</div>
+<script>
+(function(){
+  const lionImg = new Image();
+  lionImg.src = 'lion.png';
+
+  const bgm = new Audio('bgm.mp3');
+  bgm.loop = true;
+  bgm.volume = 0.5;
+
+  const maleProfImg = new Image();
+  maleProfImg.src = 'male_professer.png';
+  const femaleProfImg = new Image();
+  femaleProfImg.src = 'female_professer.png';
+
+const cvEl=document.getElementById('cv');
+const ctx=cvEl.getContext('2d');
+let CW=800,CH=540;
+
+function resizeCanvas(){
+  const wrap=document.getElementById('canvas-wrap');
+  CW=wrap.clientWidth||800;CH=wrap.clientHeight||540;
+  cvEl.width=CW;cvEl.height=CH;
+}
+
+const PH=[
+  {month:'3월', name:'개강의 달',            quote:'"새 학기야. 어디 한번 해봐!"',                         bg:'transparent',acc:'#3182F6',fiv:1500,miv:700, wt:[9,13,22,20,11],arms:2,startT:0 },
+  {month:'4월', name:'벚꽃 그리고 중간고사', quote:'"중간고사다. 이제부터 진심이야."',                     bg:'transparent',acc:'#FF6BA8',fiv:1100,miv:500, wt:[6,10,24,22,14],arms:3,startT:10},
+  {month:'중간고사', name:'지옥의 중간고사', quote:'"도망쳐도 소용없어. F만 있을 뿐이야."',               bg:'transparent',acc:'#FF3030',fiv:800, miv:380, wt:[0,0,0,0,100],  arms:3,startT:20,exam:true,examName:'midterm'},
+  {month:'5월', name:'축제의 달',             quote:'"축제라고 방심하면 F야!"',                            bg:'transparent',acc:'#00C471',fiv:850, miv:360, wt:[5,8,20,22,18], arms:4,startT:30},
+  {month:'6월', name:'종강의 달',             quote:'"살아남아 봐. 이번엔 진심이야."',                    bg:'transparent',acc:'#D02030',fiv:780, miv:300, wt:[3,5,17,22,23], arms:5,startT:40},
+  {month:'기말고사', name:'최후의 기말고사',  quote:'"이제 진짜 조금만 더 하면 종강이니 F를 피하도록."', bg:'transparent',acc:'#CC0000',fiv:650, miv:240, wt:[0,0,0,0,100],  arms:5,startT:50,exam:true}
+];
+
+const LC={
+  A:{c:'#00C471',bg:'rgba(0,90,40,.88)',   tc:'#fff',sp:4.5,r:13,hr:9},
+  B:{c:'#3182F6',bg:'rgba(8,40,130,.88)',  tc:'#fff',sp:4.5,r:13,hr:9},
+  C:{c:'#FFE033',bg:'rgba(120,100,0,.88)', tc:'#fff',sp:4.5,r:13,hr:9},
+  D:{c:'#E06000',bg:'rgba(95,25,0,.88)',   tc:'#fff',sp:4.5,r:13,hr:9},
+  F:{c:'#FF5C6A',bg:'rgba(55,4,4,.92)',    tc:'#fff',sp:4.5,r:13,hr:9}
+};
+const FX={A:15,B:5,C:-10,D:-20,F:-999};
+const SFX={A:150,B:80,C:8,D:8,F:8};
+const WS=[25,25,4,2,0];
+
+let prof='',gender='male';
+let hp=100,score=0,gTime=0;
+let running=false,raf=0,lastT=0,diff=0;
+let bullets=[],efx=[],decorPtcs=[],stars=[];
+let pTimer=0,patPhase=0,spA=0,spT=0,fireTurn='pattern';
+let keys={},touch={x:null,y:null};
+let Px=400,Py=460;
+let curPh=0,ann={on:false,a:0,t:0,ph:0},endAnn={on:false,a:0,t:0},gameEnding=false;
+const HR=17.4,SPD=5.3
+let safeZones=[],safeZoneTimer=0;
+const SAFE_ZONE_INTERVAL=2000;
+const GAME_END_TIME=60;
+
+function setGender(g){
+  gender=g;
+  document.getElementById('g-male').classList.toggle('on',g==='male');
+  document.getElementById('g-female').classList.toggle('on',g==='female');
+}
+window.setGender=setGender;
+
+function wPick(w){const t=w.reduce((a,b)=>a+b,0);let r=Math.random()*t;for(let i=0;i<5;i++){r-=w[i];if(r<=0)return'ABCDF'[i];}return'F';}
+function rrct(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
+function initStars(){stars=[];for(let i=0;i<85;i++)stars.push({x:Math.random()*CW,y:Math.random()*CH,r:.4+Math.random()*1.2,s:.05+Math.random()*.25,o:.15+Math.random()*.5});}
+
+function initDecor(p){
+  decorPtcs=[];
+  if(p===1){for(let i=0;i<45;i++)decorPtcs.push({t:'p',x:Math.random()*CW,y:Math.random()*CH,r:2.5+Math.random()*3.5,rot:Math.random()*Math.PI*2,rs:(Math.random()-.5)*.06,vx:.15+Math.random()*.5,vy:.35+Math.random()*.7,op:.3+Math.random()*.5,c:['#FFB7C5','#FF8FAB','#FFCDD8','#FFA8C0','#FF75B0'][Math.floor(Math.random()*5)]});}
+  else if(p===2){for(let i=0;i<55;i++)decorPtcs.push({t:'c',x:Math.random()*CW,y:Math.random()*CH,w:3+Math.random()*5,h:2+Math.random()*3,rot:Math.random()*Math.PI*2,rs:(Math.random()-.5)*.12,vx:(Math.random()-.5)*.8,vy:.25+Math.random()*.65,op:.35+Math.random()*.45,c:['#FFD060','#FF6BA8','#00E080','#60B8FF','#FF8C00','#C084FC'][Math.floor(Math.random()*6)]});}
+  else if(p===3){for(let i=0;i<70;i++){const up=Math.random()<.55;decorPtcs.push({t:'e',x:Math.random()*CW,y:Math.random()*CH,r:.7+Math.random()*2,vx:(Math.random()-.5)*.4,vy:up?(-.1-.5*Math.random()):(.05+.3*Math.random()),li:Math.random(),dc:.003+Math.random()*.005,c:['#FF4422','#FF9900','#FF6600','#FFCC00'][Math.floor(Math.random()*4)]});}}
+}
+
+function updateDecor(){
+  stars.forEach(s=>{s.y+=s.s;if(s.y>CH)s.y=0;});
+  decorPtcs.forEach(p=>{
+    if(p.t==='p'){p.x+=p.vx;p.y+=p.vy;p.rot+=p.rs;if(p.y>CH+10){p.y=-10;p.x=Math.random()*CW;}}
+    else if(p.t==='c'){p.x+=p.vx;p.y+=p.vy;p.rot+=p.rs;if(p.y>CH+10){p.y=-10;p.x=Math.random()*CW;}}
+    else if(p.t==='e'){p.x+=p.vx;p.y+=p.vy;p.li-=p.dc;if(p.li<=0){p.li=.7+Math.random()*.3;p.x=Math.random()*CW;p.y=CH*(.4+Math.random()*.6);}}
+  });
+}
+
+function drawDecor(){
+  stars.forEach(s=>{ctx.globalAlpha=s.o;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();});
+  decorPtcs.forEach(p=>{
+    ctx.save();ctx.globalAlpha=p.op||p.li||.4;
+    if(p.t==='p'){ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=p.c;ctx.beginPath();ctx.ellipse(0,0,p.r,p.r*.5,0,0,Math.PI*2);ctx.fill();}
+    else if(p.t==='c'){ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=p.c;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);}
+    else if(p.t==='e'){ctx.fillStyle=p.c;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();}
+    ctx.restore();
+  });
+  ctx.globalAlpha=1;
+}
+
+function bossX(){if(gameEnding)return CW/2;return CW/2+Math.sin(diff*.0007)*Math.min(100,CW*.2)+Math.sin(diff*.0013)*Math.min(40,CW*.08);}
+function bossY(){if(gameEnding)return CH*0.35;const t=Math.min(diff/5000,1);const base=90+(CH*0.35-90)*t;return base+Math.sin(diff*.0005)*Math.min(80,CH*.15)*t+Math.cos(diff*.0009)*Math.min(40,CH*.08)*t;}
+
+function spawn(x,y,ang,letter,sm){
+  const c=LC[letter],sp=(letter==='F'?4.5:c.sp)*(sm||1);
+  bullets.push({x,y,alpha:1,fading:false,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,letter,c:c.c,bg:c.bg,tc:c.tc,r:c.r,hr:c.hr,gz:false});
+}
+
+function spawnSafeZone(nearPlayer){
+  const isMid=PH[curPh].exam&&PH[curPh].month==='중간고사';
+  const shapes=['circle','rect'];
+  const shape=shapes[Math.floor(Math.random()*2)];
+  let w,h,r;
+  if(isMid){r=160+Math.random()*35;w=250+Math.random()*80;h=130+Math.random()*60;}
+  else{r=100+Math.random()*18;w=170+Math.random()*50;h=100+Math.random()*30;}
+  let x,y;
+  if(nearPlayer){
+    const offsetX=(Math.random()-.5)*100,offsetY=(Math.random()-.5)*80;
+    x=Math.max(80,Math.min(CW-80,Px+offsetX));
+    y=Math.max(120,Math.min(CH-80,Py+offsetY));
+  }else{
+    const margin=80;
+    x=margin+Math.random()*(CW-margin*2);
+    y=120+Math.random()*(CH-200);
+  }
+  safeZones.push({shape,x,y,w,h,r,life:3500,maxLife:3500,pulse:0});
+}
+
+function updateSafeZones(dt){
+  if(!PH[curPh].exam){safeZones=[];safeZoneTimer=0;return;}
+  safeZoneTimer+=dt;
+  if(safeZoneTimer>=SAFE_ZONE_INTERVAL&&safeZones.length===0){safeZoneTimer=0;spawnSafeZone();}
+  safeZones=safeZones.filter(z=>{z.life-=dt;z.pulse+=dt*.004;return z.life>0;});
+}
+
+function drawSafeZones(){
+  safeZones.forEach(z=>{
+    const alpha=Math.min(1,z.life/600)*.82;
+    const pulse=.85+Math.sin(z.pulse)*.15;
+    ctx.save();ctx.globalAlpha=alpha;
+    ctx.strokeStyle='#00FF88';ctx.lineWidth=2.5*pulse;ctx.setLineDash([6,4]);
+    if(z.shape==='circle'){
+      ctx.beginPath();ctx.arc(z.x,z.y,z.r*pulse,0,Math.PI*2);ctx.stroke();
+      ctx.globalAlpha=alpha*.18;ctx.fillStyle='#00FF88';
+      ctx.beginPath();ctx.arc(z.x,z.y,z.r*pulse,0,Math.PI*2);ctx.fill();
+    }else{
+      const hw=(z.w/2)*pulse,hh=(z.h/2)*pulse;
+      rrct(z.x-hw,z.y-hh,z.w*pulse,z.h*pulse,10);ctx.stroke();
+      ctx.globalAlpha=alpha*.18;ctx.fillStyle='#00FF88';
+      rrct(z.x-hw,z.y-hh,z.w*pulse,z.h*pulse,10);ctx.fill();
+    }
+    ctx.setLineDash([]);
+    ctx.globalAlpha=alpha*.9;
+    ctx.font='16px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('🛡️',z.x,z.y-8);
+    ctx.font='700 9px "Noto Sans KR",sans-serif';ctx.fillStyle='#00FF88';
+    ctx.fillText('SAFE',z.x,z.y+9);
+    ctx.restore();
+  });
+}
+
+function isInSafeZone(bx,by){
+  return safeZones.some(z=>{
+    if(z.shape==='circle')return Math.hypot(bx-z.x,by-z.y)<z.r;
+    else return bx>z.x-z.w/2&&bx<z.x+z.w/2&&by>z.y-z.h/2&&by<z.y+z.h/2;
+  });
+}
+
+function fire(){
+  const ph=PH[curPh],bx=bossX(),by=bossY(),pa=Math.atan2(Py-by,Px-bx),wt=ph.wt;
+  const roll=patPhase%3;
+  if(roll===0){const spread=.44;for(let i=0;i<3;i++)spawn(bx,by,pa-spread+(i*spread),wPick(ph.exam?wt:i===1?WS:wt));}
+  else if(roll===1){const n=8,rot=patPhase*(Math.PI/8);for(let i=0;i<n;i++)spawn(bx,by,(Math.PI*2/n)*i+rot,wPick(wt));}
+  else{spawn(bx,by,pa,wPick(ph.exam?wt:WS));if(curPh>=2)spawn(bx,by,pa,'F');}
+  patPhase++;
+}
+
+function spiralTick(dt){
+  if(gTime<5)return;
+  spT+=dt;
+  const iv=Math.max(120,400-diff*.05);
+  if(spT<iv)return;spT=0;
+  const arms=PH[curPh].arms;
+  for(let i=0;i<arms;i++)spawn(bossX(),bossY(),spA+(Math.PI*2/arms)*i,wPick(PH[curPh].exam?PH[curPh].wt:i===0?WS:PH[curPh].wt),.85);
+  spA+=.25;
+}
+
+function checkPhase(){
+  let next=0;
+  for(let i=PH.length-1;i>=0;i--){if(gTime>=PH[i].startT){next=i;break;}}
+  if(next!==curPh){
+    const prevWasExam=PH[curPh].exam;
+    curPh=next;
+    bullets = [];
+    initDecor(curPh);
+    ann={on:true,a:0,t:0,ph:curPh};pTimer=0;spT=0;
+    showAnnDOM(curPh);
+    const p=PH[curPh];
+    document.getElementById('hud-phase').textContent=p.month+' — '+p.name;
+    document.getElementById('hud-phase').style.color=p.acc;
+    if(p.exam){safeZones=[];safeZoneTimer=0;spawnSafeZone(true);}
+  }
+}
+
+function updateAnn(dt){
+  if(!ann.on)return;
+  ann.t+=dt/1000;const t=ann.t;let a;
+  if(t<.4)a=t/.4;
+  else if(t<2.5)a=1;
+  else if(t<3.1)a=1-(t-2.5)/.6;
+  else{ann.on=false;document.getElementById('ann-overlay').style.display='none';return;}
+  document.getElementById('ann-overlay').style.opacity=a;
+}
+
+function showAnnDOM(ph){
+  const p=PH[ph];
+  const overlay=document.getElementById('ann-overlay');
+  overlay.style.display='flex';overlay.style.opacity=0;
+  document.getElementById('ann-month').textContent=p.month;
+  document.getElementById('ann-month').style.color=p.acc;
+  document.getElementById('ann-name').textContent=p.name;
+  document.getElementById('ann-quote').textContent=p.quote;
+  document.getElementById('ann-card').style.borderColor=p.acc+'44';
+  const canvasWrap=document.getElementById('canvas-wrap');
+  const annCard=document.getElementById('ann-card');
+  if(p.exam){canvasWrap.classList.add('exam-mode');annCard.classList.add('hell');}
+  else{canvasWrap.classList.remove('exam-mode');annCard.classList.remove('hell');}
+  const dotsEl=document.getElementById('ann-dots');
+  dotsEl.innerHTML='';
+  for(let i=0;i<PH.length;i++){
+    const d=document.createElement('div');
+    d.className='ann-dot'+(i===ph?' active':'');
+    if(i===ph)d.style.background=p.acc;
+    dotsEl.appendChild(d);
+  }
+}
+
+function triggerEnding(){
+  gameEnding=true;bullets=[];efx=[];safeZones=[];
+  endAnn={on:true,a:0,t:0};
+  const overlay=document.getElementById('end-overlay');
+  overlay.style.display='flex';overlay.style.opacity=0;
+  document.getElementById('end-card').style.borderColor='#FFD06044';
+}
+
+function updateEndAnn(dt){
+  if(!endAnn.on)return;
+  endAnn.t+=dt/1000;const t=endAnn.t;let a;
+  if(t<.4)a=t/.4;
+  else if(t<2.8)a=1;
+  else if(t<3.5)a=1-(t-2.8)/.7;
+  else{endAnn.on=false;document.getElementById('end-overlay').style.display='none';running=false;setTimeout(showResult,100);return;}
+  document.getElementById('end-overlay').style.opacity=a;
+}
+
+function updateHUD(){
+  document.getElementById('sn').textContent=score.toLocaleString();
+  document.getElementById('hp-side-fill').style.height=Math.max(0,hp)+'%';
+  document.getElementById('hp-side-fill').style.background=hp>60?'#00C471':hp>30?'#E8C000':'#D02030';
+  document.getElementById('hp-side-num').textContent=Math.max(0,Math.round(hp));
+}
+
+function draw(){
+  ctx.clearRect(0,0,CW,CH);
+  if(!PH[curPh].exam)drawDecor();
+  drawSafeZones();
+  const p=PH[curPh];
+  const BX=bossX(),BY=bossY();
+  if(curPh>=2){const pulse=.07+.05*Math.sin(Date.now()*.007);ctx.strokeStyle=p.acc+Math.floor(pulse*600).toString(16).padStart(2,'0');ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(BX,BY,44,0,Math.PI*2);ctx.stroke();}
+  const profImg=gender==='female'?femaleProfImg:maleProfImg;
+  const ps=54;
+  ctx.drawImage(profImg,BX-ps/2,BY-ps/2,ps,ps);
+  ctx.font='700 11px "Noto Sans KR",sans-serif';ctx.fillStyle=PH[curPh].exam?'#ffffff':'#000000';ctx.textAlign='center';ctx.textBaseline='alphabetic';
+  ctx.fillText((prof||'김멋사')+'교수',BX,BY+38);
+
+  bullets.forEach(b=>{
+    ctx.globalAlpha=b.alpha??1;
+    ctx.strokeStyle=b.c+'50';ctx.lineWidth=2;ctx.beginPath();ctx.arc(b.x,b.y,b.r+3,0,Math.PI*2);ctx.stroke();
+    ctx.fillStyle=b.bg;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle=b.c;ctx.lineWidth=1.5;ctx.stroke();
+    ctx.font='900 '+(b.r*1.0)+'px "Noto Sans KR",sans-serif';
+    ctx.fillStyle=b.tc;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(b.letter,b.x,b.y+1);
+    ctx.globalAlpha=1;
+  });
+
+  const size=45;
+  ctx.drawImage(lionImg,Px-size/2,Py-size/2,size,size);
+  ctx.strokeStyle='rgba(255,0,0,0.8)';
+  efx.forEach(e=>{ctx.globalAlpha=e.l;ctx.font='800 '+e.s+'px "Noto Sans KR",sans-serif';ctx.fillStyle=e.c;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(e.t,e.x,e.y);});
+  ctx.globalAlpha=1;
+}
+
+function loop(ts){
+  if(!running)return;
+  const dt=lastT?Math.min(ts-lastT,50):16;
+  lastT=ts;
+  if(!ann.on)gTime+=dt/1000;
+  diff+=dt;
+  if(!gameEnding && !ann.on){
+    hp=Math.max(0,hp-2.0*(dt/1000));
+    if(hp<=0){hp=0;running=false;setTimeout(showResult,400);}
+  }
+  checkPhase();updateDecor();updateAnn(dt);updateSafeZones(dt);
+  const ph=PH[curPh];
+  if(gTime>=GAME_END_TIME&&!gameEnding)triggerEnding();
+  if(gameEnding)updateEndAnn(dt);
+  if(!gameEnding && !ann.on){
+    pTimer-=dt;
+    if(pTimer<=0){fire();pTimer=Math.max(ph.miv,ph.fiv-diff*.03);}
+    spiralTick(dt);
+  }
+  const sp=SPD;
+  if(gameEnding){updateHUD();draw();raf=requestAnimationFrame(loop);return;}
+  let dx=0,dy=0;
+  if(keys['ArrowLeft']||keys['a']||keys['A'])dx-=1;
+  if(keys['ArrowRight']||keys['d']||keys['D'])dx+=1;
+  if(keys['ArrowUp']||keys['w']||keys['W'])dy-=1;
+  if(keys['ArrowDown']||keys['s']||keys['S'])dy+=1;
+  if(dx&&dy){dx*=.707;dy*=.707;}
+  Px=Math.max(12,Math.min(CW-12,Px+dx*sp));
+  Py=Math.max(12,Math.min(CH-12,Py+dy*sp));
+  if(touch.x!==null){
+    const td=Math.hypot(touch.x-Px,touch.y-Py);
+    if(td>3){const ts2=Math.min(1,td/35)*sp*2.2;Px+=((touch.x-Px)/td)*ts2;Py+=((touch.y-Py)/td)*ts2;}
+    Px=Math.max(12,Math.min(CW-12,Px));Py=Math.max(12,Math.min(CH-12,Py));
+  }
+  bullets=bullets.filter(b=>{
+    if(b.fading){b.alpha-=dt/500;if(b.alpha<=0)return false;}
+    b.x+=b.vx;b.y+=b.vy;
+    if(b.x<-40||b.x>CW+40||b.y<-40||b.y>CH+40)return false;
+    const d=Math.hypot(b.x-Px,b.y-Py);
+    const playerSafe=b.letter==='F'&&isInSafeZone(Px,Py);
+    if(!playerSafe&&d<b.hr+HR){
+      if(ann.on)return false;
+      let f=FX[b.letter];
+      hp=Math.max(0,Math.min(100,hp+f));
+      score+=SFX[b.letter];
+      efx.push({x:b.x,y:b.y,vx:(Math.random()-.5)*1.5,vy:-2.3,l:1,c:f>0?'#00C471':'#FF5C6A',t:f>0?'+'+f+'HP':b.letter==='F'?'💀':f+'HP',s:13});
+      if(b.letter==='F'||hp<=0){hp=0;running=false;setTimeout(showResult,400);return false;}
+      return false;
+    }
+    return true;
+  });
+  efx=efx.filter(e=>{e.x+=e.vx;e.y+=e.vy;e.vy+=.05;e.l-=.045;return e.l>0;});
+  score+=Math.floor(dt/200);
+  updateHUD();draw();
+  raf=requestAnimationFrame(loop);
+}
+
+function showResult(){
+  bgm.pause();
+  document.getElementById('game-screen').style.display='none';
+  let g,m;
+  if(score>=4000){g='A+';m='"감탄했다. 네가 최고야."';}
+  else if(score>=2800){g='A';m='"훌륭해. 학문에 정진하게나."';}
+  else if(score>=1900){g='B+';m='"조금만 더 하면 A가 보인다."';}
+  else if(score>=1200){g='B';m='"그럭저럭. 좀 더 분발하게."';}
+  else if(score>=650){g='C+';m='"수업은 들었나? 보충 필요해."';}
+  else if(score>=320){g='C';m='"재수강을 강력히 권장하겠어."';}
+  else if(score>=120){g='D';m='"자네… 많이 반성하게나."';}
+  else{g='F';m='"학사경고야. 진심으로 걱정되네."';}
+  document.getElementById('res-school').textContent=(window._selectedSchool||'○○대학교');
+  document.getElementById('rby').textContent='교수 : '+(prof||'김멋사');
+  document.getElementById('rqt').textContent=m;
+  document.getElementById('rv0').textContent=score.toLocaleString();
+  const mins=Math.floor(gTime/60),secs=Math.floor(gTime%60);
+  document.getElementById('rv1').textContent=mins>0?mins+'분 '+secs+'초':secs+'초';
+  document.getElementById('res-rank').textContent='집계 중...';
+  const rb=document.getElementById('rbg');
+  rb.textContent=g;rb.style.color='#c8302a';rb.style.borderColor='#c8302a';
+  document.getElementById('rank-section').innerHTML='<div class="rank-loading">🔄 랭킹 불러오는 중...</div>';
+  document.getElementById('s2').style.display='flex';
+  if(window._saveAndRank&&window._selectedSchool){window._saveAndRank(window._selectedSchool,score);}
+}
+
+function isMobileDevice(){
+  const ua=navigator.userAgent||navigator.vendor||window.opera;
+  const uaMatch=/android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(ua);
+  const touchEnv=('ontouchstart' in window)||navigator.maxTouchPoints>0;
+  return uaMatch||touchEnv;
+}
+
+function captureResultPaper(){
+  return new Promise(function(resolve,reject){
+    const el=document.querySelector('.res-paper');
+    if(!el){reject(new Error('.res-paper 요소를 찾을 수 없음'));return;}
+    const stamp = document.getElementById('rbg');
+      stamp.style.animation = 'none';
+      stamp.style.transform = 'rotate(-12deg) scale(1)';
+      stamp.style.opacity = '0.82';
+      html2canvas(el,{
+      scale:2,
+      useCORS:true,
+      backgroundColor:null,
+      scrollX:0,
+      scrollY:0,
+      x:0,
+      y:0,
+      width:el.offsetWidth,
+      height:el.offsetHeight
+    }).then(function(canvas){
+      canvas.toBlob(function(blob){
+        if(!blob){reject(new Error('blob 생성 실패'));return;}
+        const filename='grade-result-'+Date.now()+'.png';
+        const file=new File([blob],filename,{type:'image/png'});
+        resolve({blob:blob,file:file,filename:filename});
+      },'image/png');
+    }).catch(function(err){reject(err);});
+  });
+}
+
+function downloadBlob(blob,filename){
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+async function shareResult(){
+  let captured;
+  try{
+    captured=await captureResultPaper();
+  }catch(e){
+    console.error('캡처 실패:',e);
+    return;
+  }
+  const {blob,file,filename}=captured;
+  const school=window._selectedSchool||'○○대학교';
+  const g=document.getElementById('rbg').textContent;
+  const sc=document.getElementById('rv0').textContent;
+  const t=document.getElementById('rv1').textContent;
+  const shareTitle='학점 피하기 결과';
+  const shareText='[학점 피하기] '+school+'\n최종 점수: '+sc+'점 | 생존: '+t+'\n등급: '+g;
+
+  if(isMobileDevice()){
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+      try{
+        await navigator.share({files:[file],title:shareTitle,text:shareText});
+        return;
+      }catch(e){
+        // AbortError는 사용자가 공유창을 직접 닫은 것이므로 에러 처리 없이 조용히 종료
+        if(e&&e.name==='AbortError')return;
+        downloadBlob(blob,filename);
+        return;
+      }
+    }
+    downloadBlob(blob,filename);
+    return;
+  }
+
+  downloadBlob(blob,filename);
+}
+
+window.shareResult=shareResult;
+
+function startGame(){
+  bgm.currentTime=0;
+  bgm.play();
+  const schoolEl=document.getElementById('school-select');
+  if(!schoolEl.value){alert('학교를 선택해주세요!');return;}
+  window._selectedSchool=schoolEl.value;
+  prof=document.getElementById('pi').value.trim()||'김멋사';
+  hp=100;score=0;gTime=0;diff=0;
+  bullets=[];efx=[];keys={};touch={x:null,y:null};
+  safeZones=[];safeZoneTimer=0;
+  lastT=0;pTimer=0;patPhase=0;spA=0;spT=0;
+  curPh=0;ann={on:true,a:0,t:0,ph:0};endAnn={on:false,a:0,t:0};gameEnding=false;fireTurn='pattern';_rankSaving=false;
+  document.getElementById('canvas-wrap').classList.remove('exam-mode');
+  document.getElementById('ann-card').classList.remove('hell');
+  showAnnDOM(0);
+  document.getElementById('s0').style.display='none';
+  document.getElementById('s2').style.display='none';
+  document.getElementById('game-screen').style.display='flex';
+  resizeCanvas();
+  Px=CW/2;Py=CH*.82;
+  initStars();initDecor(0);
+  const p0=PH[0];
+  document.getElementById('hud-av').textContent=gender==='female'?'👩‍🏫':'👨‍🏫';
+  document.getElementById('hud-name').textContent=(prof||'김멋사')+' 교수';
+  document.getElementById('hud-phase').textContent=p0.month+' — '+p0.name;
+  document.getElementById('hud-phase').style.color=p0.acc;
+  document.getElementById('tutorial-overlay').style.display = 'flex';
+
+}
+
+function actuallyStartGame() {
+  running = true;
+  ann = {on: true, a: 0, t: 0, ph: 0};
+  showAnnDOM(0);
+  cancelAnimationFrame(raf);
+  raf = requestAnimationFrame(loop);
+}
+window.actuallyStartGame = actuallyStartGame;
+
+function goHome(){
+  running=false;cancelAnimationFrame(raf);
+  bgm.pause();
+  document.getElementById('canvas-wrap').classList.remove('exam-mode');
+  document.getElementById('game-screen').style.display='none';
+  document.getElementById('s2').style.display='none';
+  document.getElementById('s0').style.display='flex';
+}
+
+window.startGame=startGame;
+document.getElementById('rb2').addEventListener('click',goHome);
+document.getElementById('hb2').addEventListener('click',startGame);
+document.getElementById('pi').addEventListener('keydown',function(e){if(e.key==='Enter')startGame();});
+document.addEventListener('keydown',function(e){keys[e.key]=true;if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))e.preventDefault();});
+document.addEventListener('keyup',function(e){keys[e.key]=false;});
+const wrap2=document.getElementById('canvas-wrap');
+wrap2.addEventListener('touchstart',function(e){const t=e.touches[0],r=wrap2.getBoundingClientRect();touch={x:t.clientX-r.left,y:t.clientY-r.top};e.preventDefault();},{passive:false});
+wrap2.addEventListener('touchmove',function(e){const t=e.touches[0],r=wrap2.getBoundingClientRect();touch={x:t.clientX-r.left,y:t.clientY-r.top};e.preventDefault();},{passive:false});
+wrap2.addEventListener('touchend',function(){touch={x:null,y:null};});
+window.addEventListener('resize',function(){if(running)resizeCanvas();});
+})();
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, query, where, orderBy, limit, getDocs, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDp7zGsHZR2H4_Gzx4Pf2XOlJXGAHoZPDg",
+  authDomain: "animal-league-41137.firebaseapp.com",
+  projectId: "animal-league-41137",
+  storageBucket: "animal-league-41137.firebasestorage.app",
+  messagingSenderId: "173619560796",
+  appId: "1:173619560796:web:123937cb9d333e2e354199",
+  measurementId: "G-2C5YQTXHS7"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+
+window._rankSaving = false;
+window._saveAndRank = async function(school, score) {
+  if(window._rankSaving) return;
+  window._rankSaving = true;
+  const rankEl = document.getElementById('rank-section');
+  try {
+    await addDoc(collection(db, 'scores'), {
+      school, score, createdAt: serverTimestamp()
+    });
+    
+    const qAll = query(
+      collection(db, 'scores'),
+      where('school', '==', school),
+      orderBy('score', 'desc')
+    );
+    const snapAll = await getDocs(qAll);
+    const allRows = snapAll.docs.map(d => d.data());
+    const myRank = allRows.filter(r => r.score > score).length + 1;
+
+    const rows = allRows.slice(0, 10);
+    
+    document.getElementById('res-rank').textContent = myRank + '등';
+    const medals = ['🥇','🥈','🥉'];
+    const items = rows.map((r, i) => {
+      const isMe = r.score === score;
+      return `<div class="rank-item${isMe?' me':''}">
+        <span class="rank-medal">${medals[i] || (i+1)+'위'}</span>
+        <span class="rank-score">${r.score.toLocaleString()}점${isMe?' &nbsp;← 나':''}</span>
+      </div>`;
+    }).join('');
+    rankEl.innerHTML = `
+      <div class="rank-title">
+        🏫 ${school} 랭킹
+        <span class="rank-me">내 순위 ${myRank}위</span>
+      </div>
+      ${items}`;
+  } catch(e) {
+    console.warn('Firebase 오류:', e);
+    rankEl.innerHTML = '<div class="rank-loading">랭킹을 불러오지 못했어요 😥</div>';
+  } finally {
+    window._rankSaving = false;
+  }
+};
+</script>
+</body>
+</html>
