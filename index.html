@@ -31,8 +31,6 @@ body{background:var(--bg);display:flex;justify-content:center;align-items:flex-s
   z-index:2;
   text-align:center;
   margin-top:160px;
-  background: rgba(255, 255, 255, 0.047);
-  backdrop-filter: blur(12px);
   border-radius: 30px;
   padding: 16px 24px;
 }
@@ -324,7 +322,7 @@ body{background:var(--bg);display:flex;justify-content:center;align-items:flex-s
     </div>
   </div>
   <div class="res-btns">
-    <button id="share-btn" onclick="shareResult()">&#x2197;&nbsp;&nbsp;성적표 저장하기</button>
+    <button id="share-btn" onclick="shareResult()">&#x2197;&nbsp;&nbsp;성적표 공유하기</button>
     <div class="res-btn-row">
       <button id="rb2">〈&nbsp;처음으로</button>
       <button id="hb2">다시 도전하기&nbsp;〉</button>
@@ -725,7 +723,7 @@ function captureResultPaper(){
       html2canvas(el,{
       scale:2,
       useCORS:true,
-      backgroundColor:'#ffffff',
+      backgroundColor:'#efefef',
       scrollX:0,
       scrollY:0,
       x:0,
