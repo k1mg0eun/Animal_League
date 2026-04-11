@@ -766,7 +766,7 @@ async function shareResult(){
   const sc=document.getElementById('rv0').textContent;
   const t=document.getElementById('rv1').textContent;
   const shareTitle='학점 피하기 결과';
-  const shareText='[학점 피하기] '+school+'\n최종 점수: '+sc+'점 | 생존: '+t+'\n등급: '+g;
+  const shareText = '[학점 피하기] ' + school + '\n최종 점수: ' + sc + '점 | 생존: ' + t + '\n등급: ' + g + '\n\nhttps://k1mg0eun.github.io/Animal_League/';
 
   if(isMobileDevice()){
     if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
