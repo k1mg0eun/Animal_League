@@ -604,12 +604,12 @@ function draw(){
   ctx.font='700 11px "Noto Sans KR",sans-serif';ctx.fillStyle=PH[curPh].exam?'#ffffff':'#000000';ctx.textAlign='center';ctx.textBaseline='alphabetic';
   ctx.fillText((prof||'김멋사')+'교수',BX,BY+38);
 
-  ctx.font='900 '+(b.r*1.0)+'px "Noto Sans KR",sans-serif';
   bullets.forEach(b=>{
     ctx.globalAlpha=b.alpha??1;
     ctx.strokeStyle=b.c+'50';ctx.lineWidth=2;ctx.beginPath();ctx.arc(b.x,b.y,b.r+3,0,Math.PI*2);ctx.stroke();
     ctx.fillStyle=b.bg;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();
     ctx.strokeStyle=b.c;ctx.lineWidth=1.5;ctx.stroke();
+    ctx.font='900 '+(b.r*1.0)+'px "Noto Sans KR",sans-serif';
     ctx.fillStyle=b.tc;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(b.letter,b.x,b.y+1);
     ctx.globalAlpha=1;
   });
