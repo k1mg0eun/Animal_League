@@ -141,6 +141,10 @@ body{background:var(--bg);display:flex;justify-content:center;align-items:flex-s
 .rank-score{font-weight:500;color:rgba(255,255,255,.6);}
 .rank-item.me .rank-score{font-weight:900;color:#fff;}
 .rank-loading{font-size:12px;color:rgba(255,255,255,.3);text-align:center;padding:16px;}
+.school-rank-section{position:relative;z-index:2;width:calc(100% - 32px);max-width:339px;margin-top:16px;background:rgba(0,0,0,.35);border-radius:14px;padding:16px 14px;}
+.school-rank-section .rank-title{color:rgba(255,255,255,.7);font-size:13px;}
+.school-rank-section .rank-item{font-size:12px;}
+.school-rank-section .rank-school-name{flex:1;color:rgba(255,255,255,.85);margin-left:8px;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
 #ann-overlay{position:absolute;inset:0;z-index:10;display:none;align-items:center;justify-content:center;pointer-events:none;}
 #end-overlay{position:absolute;inset:0;z-index:10;display:none;align-items:center;justify-content:center;pointer-events:none;}
@@ -230,7 +234,10 @@ body{background:var(--bg);display:flex;justify-content:center;align-items:flex-s
       <button id="start-btn" onclick="startGame()">▷ 개강하기</button>
     </div>
   </div>
-
+  <div class="school-rank-section" id="school-rank-section">
+  <div class="rank-title" style="justify-content:center;margin-bottom:12px;">🏆 학교별 랭킹</div>
+  <div id="school-rank-list"><div class="rank-loading">🔄 불러오는 중...</div></div>
+  </div>
   <div class="s0-credit">@ TOBEPM 2.0</div>
 </div>
 
@@ -877,6 +884,35 @@ window._rankSaving = false;
   inp.addEventListener('blur',function(){setTimeout(()=>list.classList.remove('open'),150);});
   document.addEventListener('click',function(e){if(!document.getElementById('school-combo').contains(e.target))list.classList.remove('open');});
 })();
+window._loadSchoolRank = async function() {
+  const listEl = document.getElementById('school-rank-list');
+  if(!listEl) return;
+  try {
+    const qAll = query(
+      collection(db, 'scores'),
+      orderBy('score', 'desc')
+    );
+    const snap = await getDocs(qAll);
+    // 학교별 최고점 1명만 추출
+    const best = {};
+    snap.docs.forEach(d => {
+      const r = d.data();
+      if(!best[r.school] || r.score > best[r.school].score) best[r.school] = r;
+    });
+    const sorted = Object.values(best).sort((a,b) => b.score - a.score).slice(0, 10);
+    const medals = ['🥇','🥈','🥉'];
+    listEl.innerHTML = sorted.map((r, i) => `
+      <div class="rank-item">
+        <span class="rank-medal">${medals[i] || (i+1)+'위'}</span>
+        <span class="rank-school-name">${r.school}</span>
+        <span class="rank-prof">${r.professor||'?'} 교수</span>
+        <span class="rank-score">${r.score.toLocaleString()}점</span>
+      </div>`).join('');
+  } catch(e) {
+    listEl.innerHTML = '<div class="rank-loading">랭킹을 불러오지 못했어요 😥</div>';
+  }
+};
+window._loadSchoolRank();
 window._saveAndRank = async function(school, score, professor) {
   if(window._rankSaving) return;
   window._rankSaving = true;
