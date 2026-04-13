@@ -50,6 +50,18 @@ body{background:var(--bg);display:flex;justify-content:center;align-items:flex-s
 .fi::placeholder{color:#999;}
 .fi-select-wrap{position:relative;}
 .fi-select-wrap::after{content:'▼';position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:11px;color:#888;pointer-events:none;}
+.combo-wrap{position:relative;}
+.combo-wrap input.fi{width:100%;box-sizing:border-box;cursor:text;}
+.combo-list{position:absolute;top:100%;left:0;right:0;max-height:200px;overflow-y:auto;background:#fff;border:1px solid #ccc;border-radius:6px;z-index:999;display:none;box-shadow:0 4px 12px rgba(0,0,0,.15);}
+.combo-list.open{display:block;}
+.combo-item{padding:10px 14px;font-size:14px;font-family:'DungGeunMo',sans-serif;cursor:pointer;}
+.combo-item:hover,.combo-item.active{background:#f0f4ff;}
+.combo-wrap{position:relative;}
+.combo-wrap input.fi{width:100%;box-sizing:border-box;cursor:text;}
+.combo-list{position:absolute;top:100%;left:0;right:0;max-height:200px;overflow-y:auto;background:#fff;border:1px solid #ccc;border-radius:6px;z-index:999;display:none;box-shadow:0 4px 12px rgba(0,0,0,.15);}
+.combo-list.open{display:block;}
+.combo-item{padding:10px 14px;font-size:14px;font-family:'DungGeunMo',sans-serif;cursor:pointer;}
+.combo-item:hover,.combo-item.active{background:#f0f4ff;}
 .gender-row{display:flex;gap:12px;}
 .gb2{flex:1;display:flex;align-items:center;justify-content:center;height:48px;border-radius:14px;border:none;background:#fff;color:#434343;font-family:'DungGeunMo',sans-serif;font-size:16px;cursor:pointer;transition:all .18s;}
 .gb2.on{background:#e8eaff;color:#4053a5;box-shadow:0 3px 12px rgba(64,83,165,.25);}
@@ -198,37 +210,9 @@ body{background:var(--bg);display:flex;justify-content:center;align-items:flex-s
     <div class="s0-form">
       <div>
         <div class="fl">학교</div>
-        <div class="fi-select-wrap">
-          <select id="school-select" class="fi">
-            <option value="" disabled selected>학교를 선택해주세요.</option>
-            <option>가천대학교</option><option>가톨릭대학교</option><option>강남대학교</option>
-            <option>경기대학교</option><option>경남대학교</option><option>경북대학교</option>
-            <option>경상국립대학교</option><option>경성대학교</option><option>경희대학교</option>
-            <option>계명대학교</option><option>고려대학교(서울)</option><option>고려대학교(세종)</option>
-            <option>공주대학교(천안)</option><option>광운대학교</option><option>국립창원대학교</option>
-            <option>국민대학교</option><option>금오공과대학교</option><option>단국대학교</option>
-            <option>대구대학교</option><option>덕성여자대학교</option><option>동국대학교</option>
-            <option>동덕여자대학교</option><option>동아대학교</option><option>명지대학교(인문)</option>
-            <option>명지대학교(자연)</option><option>백석대학교</option><option>삼육대학교</option>
-            <option>상명대학교(서울)</option><option>상명대학교(천안)</option><option>서강대학교</option>
-            <option>서경대학교</option><option>서울과학기술대학교</option><option>서울대학교</option>
-            <option>서울시립대학교</option><option>서울여자대학교</option><option>서울예술대학교</option>
-            <option>서일대학교</option><option>선문대학교</option><option>성결대학교</option>
-            <option>성공회대학교</option><option>성균관대학교</option><option>성신여자대학교</option>
-            <option>숙명여자대학교</option><option>순천대학교</option><option>순천향대학교</option>
-            <option>숭실대학교</option><option>신한대학교</option><option>수원대학교</option>
-            <option>연세대학교</option><option>연세대학교(미래)</option><option>연암공과대학교</option>
-            <option>영남대학교</option><option>우송대학교</option><option>을지대학교</option>
-            <option>이화여자대학교</option><option>인천대학교</option><option>인하공업전문대학</option>
-            <option>인하대학교</option><option>전북대학교</option><option>제주대학교</option>
-            <option>중부대학교</option><option>중앙대학교</option><option>청주대학교</option>
-            <option>충남대학교</option><option>충북대학교</option><option>태재대학교</option>
-            <option>평택대학교</option><option>한국공학대학교</option><option>한국교통대학교</option>
-            <option>한국기술교육대학교</option><option>한국외국어대학교</option><option>한국외국어대학교(글로벌)</option>
-            <option>한국항공대학교</option><option>한남대학교</option><option>한동대학교</option>
-            <option>한림대학교</option><option>한밭대학교</option><option>한서대학교</option>
-            <option>한성대학교</option><option>호서대학교</option><option>홍익대학교</option>
-          </select>
+        <div class="combo-wrap" id="school-combo">
+          <input type="text" id="school-select" class="fi" placeholder="학교를 검색하거나 선택해주세요." autocomplete="off" readonly>
+          <div class="combo-list" id="school-list"></div>
         </div>
       </div>
       <div>
@@ -792,8 +776,8 @@ function startGame(){
   bgm.currentTime=0;
   bgm.play();
   const schoolEl=document.getElementById('school-select');
-  if(!schoolEl.value){alert('학교를 선택해주세요!');return;}
-  window._selectedSchool=schoolEl.value;
+  if(!schoolEl.dataset.value){alert('학교를 선택해주세요!');return;}
+  window._selectedSchool=schoolEl.dataset.value;
   prof=document.getElementById('pi').value.trim()||'김멋사';
   hp=100;score=0;gTime=0;diff=0;
   bullets=[];efx=[];keys={};touch={x:null,y:null};
@@ -869,6 +853,29 @@ const db = getFirestore(app);
 
 
 window._rankSaving = false;
+(function(){
+  const schools=["가천대학교","가톨릭대학교","강남대학교","경기대학교","경남대학교","경북대학교","경상국립대학교","경성대학교","경희대학교","계명대학교","고려대학교(서울)","고려대학교(세종)","공주대학교(천안)","광운대학교","국립창원대학교","국민대학교","금오공과대학교","단국대학교","대구대학교","덕성여자대학교","동국대학교","동덕여자대학교","동아대학교","명지대학교(인문)","명지대학교(자연)","백석대학교","삼육대학교","상명대학교(서울)","상명대학교(천안)","서강대학교","서경대학교","서울과학기술대학교","서울대학교","서울시립대학교","서울여자대학교","서울예술대학교","서일대학교","선문대학교","성결대학교","성공회대학교","성균관대학교","성신여자대학교","숙명여자대학교","순천대학교","순천향대학교","숭실대학교","신한대학교","수원대학교","연세대학교","연세대학교(미래)","연암공과대학교","영남대학교","우송대학교","을지대학교","이화여자대학교","인천대학교","인하공업전문대학","인하대학교","전북대학교","제주대학교","중부대학교","중앙대학교","청주대학교","충남대학교","충북대학교","태재대학교","평택대학교","한국공학대학교","한국교통대학교","한국기술교육대학교","한국외국어대학교","한국외국어대학교(글로벌)","한국항공대학교","한남대학교","한동대학교","한림대학교","한밭대학교","한서대학교","한성대학교","호서대학교","홍익대학교"];
+  const inp=document.getElementById('school-select');
+  const list=document.getElementById('school-list');
+  function render(filter){
+    const q=(filter||'').trim();
+    const filtered=q?schools.filter(s=>s.includes(q)):schools;
+    list.innerHTML=filtered.map(s=>`<div class="combo-item">${s}</div>`).join('');
+    list.classList.toggle('open',filtered.length>0);
+    list.querySelectorAll('.combo-item').forEach(el=>{
+      el.addEventListener('mousedown',function(e){
+        e.preventDefault();
+        inp.value=el.textContent;
+        inp.dataset.value=el.textContent;
+        list.classList.remove('open');
+      });
+    });
+  }
+  inp.addEventListener('focus',function(){inp.readOnly=false;render(inp.value);});
+  inp.addEventListener('input',function(){render(inp.value);});
+  inp.addEventListener('blur',function(){setTimeout(()=>list.classList.remove('open'),150);});
+  document.addEventListener('click',function(e){if(!document.getElementById('school-combo').contains(e.target))list.classList.remove('open');});
+})();
 window._saveAndRank = async function(school, score) {
   if(window._rankSaving) return;
   window._rankSaving = true;
