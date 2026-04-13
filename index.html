@@ -50,8 +50,7 @@ body{background:var(--bg);display:flex;justify-content:center;align-items:flex-s
 .fi::placeholder{color:#999;}
 .fi-select-wrap{position:relative;}
 .fi-select-wrap::after{content:'▼';position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:11px;color:#888;pointer-events:none;}
-.rank-prof{font-size:12px;color:#888;margin-left:6px;}
-.rank-me-tag{font-size:12px;color:#4053a5;font-weight:700;margin-left:4px;}
+.rank-prof{font-size:13px;color:inherit;opacity:0.7;flex:1;text-align:left;margin-left:8px;}
 .combo-wrap{position:relative;}
 .combo-wrap input.fi{width:100%;box-sizing:border-box;cursor:text;}
 .combo-list{position:absolute;top:100%;left:0;right:0;max-height:200px;overflow-y:auto;background:#fff;border:1px solid #ccc;border-radius:6px;z-index:999;display:none;box-shadow:0 4px 12px rgba(0,0,0,.15);}
@@ -904,9 +903,8 @@ window._saveAndRank = async function(school, score, professor) {
       const isMe = r.score === score;
       return `<div class="rank-item${isMe?' me':''}">
         <span class="rank-medal">${medals[i] || (i+1)+'위'}</span>
-        <span class="rank-score">${r.score.toLocaleString()}점</span>
         <span class="rank-prof">${r.professor||'?'} 교수</span>
-        ${isMe?'<span class="rank-me-tag">← 나</span>':''}
+        <span class="rank-score">${r.score.toLocaleString()}점${isMe?' &nbsp;← 나':''}</span>
       </div>`;
     }).join('');
     rankEl.innerHTML = `
