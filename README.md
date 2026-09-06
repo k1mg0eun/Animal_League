@@ -19,7 +19,6 @@
 | 파일 | 설명 |
 |------|------|
 | `index.html` | 게임 본체 (HTML / CSS / JS 단일 파일) |
-| `5.0.html` | 이전 버전 |
 | `firebase-config.js` | Firebase 설정 (git에 올라가지 않음) |
 | `firebase-config.example.js` | Firebase 설정 템플릿 |
 | `*.png`, `bgm.mp3`, `neodgm.woff*` | 이미지, 배경음악, 폰트 리소스 |
