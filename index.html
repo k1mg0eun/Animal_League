@@ -846,15 +846,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getFirestore, collection, addDoc, query, where, orderBy, limit, getDocs, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDp7zGsHZR2H4_Gzx4Pf2XOlJXGAHoZPDg",
-  authDomain: "animal-league-41137.firebaseapp.com",
-  projectId: "animal-league-41137",
-  storageBucket: "animal-league-41137.firebasestorage.app",
-  messagingSenderId: "173619560796",
-  appId: "1:173619560796:web:123937cb9d333e2e354199",
-  measurementId: "G-2C5YQTXHS7"
-};
+import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
